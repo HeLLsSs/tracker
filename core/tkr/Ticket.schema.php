@@ -1,0 +1,116 @@
+<?php
+
+return array(
+    'shortName' => 'Ticket',
+    'modelType' => '\core\tkr\Ticket',
+    'tableName' => 'tkr_ticket',
+    'description' => 'ticket',
+    'pluralDescription' => 'tickets',
+    'properties' => array(
+        'id' => array(
+            'type'          => 'int',
+            'autoincrement' => true,
+            'primaryKey'    => true,
+            'inputType'     => 'InputHidden',
+        ),
+        'title' => array(
+            'type'          => 'string',
+            'length'        => 255,
+            'null'          => false,
+            'formLabel'     => 'Titre',
+            'inputType'     => 'InputText',
+        ),
+        'description' => array(
+            'type'          => 'text',
+            'null'          => true,
+            'formLabel'     => 'Description',
+            'inputType'     => 'RichText',
+        ),
+        'project_id' => array(   
+            'type'              => 'int',
+            'null'              => false,
+            'formLabel'         => 'Projet',
+            'inputType'         => 'InputHidden',
+            'modelType'         => '\core\tkr\Project',
+            'foreignTable'      => 'tkr_project',
+            'foreignReference'  => 'id',
+            // 'firstBlank'        => false,
+        ),
+        'author_id' => array(   
+            'type'              => 'int',
+            'null'              => false,
+            'formLabel'         => 'Auteur',
+            'inputType'         => 'InputHidden',
+            'modelType'         => '\core\tkr\User',
+            'foreignTable'      => 'tkr_user',
+            'foreignReference'  => 'id',
+            // 'firstBlank'        => false,
+        ),
+        'developer_id' => array(   
+            'type'              => 'int',
+            'null'              => false,
+            'formLabel'         => 'Assigné à',
+            // 'inputType'         => 'SelectOne',
+            'modelType'         => '\core\tkr\User',
+            'foreignTable'      => 'tkr_user',
+            'foreignReference'  => 'id',
+            'firstBlank'        => true,
+        ),
+        'status' => array(
+            'type'              => 'int',
+            'null'              => false,
+            'formLabel'         => 'État',
+            'inputType'         => 'SelectOne',
+            'options'           => Array(
+                1 => 'En attente',
+                2 => 'Assigné (en cours)',
+                3 => 'En attente client',
+                4 => 'Validé',
+                5 => 'Annulé',
+            ),
+        ),
+        'type' => array(
+            'type'              => 'int',
+            'null'              => false,
+            'formLabel'         => 'Type',
+            'inputType'         => 'SelectOne',
+            'options'           => Array(
+                1 => 'Anomalie',
+                2 => 'Tâche',
+                3 => 'Amélioration',
+                4 => 'Requête',
+            ),
+        ),
+        'priority' => array(
+            'type'              => 'int',
+            'null'              => false,
+            'formLabel'         => 'Priorité',
+            'inputType'         => 'SelectOne',
+            'options'           => Array(
+                1 => 'Normal',
+                2 => 'Urgent',
+                3 => 'Bloquant',
+            ),
+        ),
+        'datecreated' => array(
+            'type'          => 'datetime',
+            'formLabel'     => 'Date de création', 
+            'null'          => false,
+        ),
+        'datemodified' => array(
+            'type'          => 'datetime',
+            'null'          => false,
+        ),
+    ),
+    /*'manyProperties' => array(
+        'fixes' => array(
+            'formLabel'         => 'Corrections',
+            'modelType'         => '\core\tkr\Fix',
+            'foreignTable'      => 'tkr_fix',
+            'foreignReference'  => 'id',
+        ),
+    ),*/
+    'adminColumns' => array( 'title', 'project_id', 'type', 'status', 'priority', 'author_id', 'datecreated' ),
+    'orderColumn' => 'datecreated DESC',
+    'linkColumns' => Array( 'title' ),
+);

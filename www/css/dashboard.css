@@ -1,0 +1,67 @@
+#logoBox {
+	background: 			-moz-linear-gradient(center top , #DDDDDD, #EDEDED) repeat scroll 0 0 transparent;
+	background:         	-webkit-gradient(linear, left top, left bottom, from(#ddd), to(#ededed));
+	color:					#fff;
+	padding:				5px;
+	margin-bottom:			10px;
+	text-align:				center;
+	-moz-border-radius:		4px;
+	-webkit-border-radius:	4px;
+	border-radius: 			4px;
+}
+
+#grossBox {
+	background: 			-moz-linear-gradient(center top , #DDDDDD, #EDEDED) repeat scroll 0 0 transparent;
+	background:         	-webkit-gradient(linear, left top, left bottom, from(#ddd), to(#ededed));
+	padding:				0 0 20px 0;
+	margin-bottom:			20px;
+	-moz-border-radius: 	6px;
+	-webkit-border-radius: 	6px;
+	border-radius: 		    6px;
+}
+
+#smallBox {
+	background: 			-moz-linear-gradient(center top , #DDDDDD, #EDEDED) repeat scroll 0 0 transparent;
+	background:         	-webkit-gradient(linear, left top, left bottom, from(#ddd), to(#ededed));
+	padding:				0 0 20px 0;
+	margin-bottom:			20px;
+	-moz-border-radius: 	6px;
+	-webkit-border-radius: 	6px;
+	border-radius: 		    6px;
+	width:					31%;
+	float:					left;
+	margin-right:			2.5%;
+	
+}
+
+#smallBox:last-child {
+    margin-right:           0;
+}
+
+.countCell {
+    text-align:         center;
+    padding:            10px 0;
+}
+
+.countCell a {
+}
+
+.countCell a:hover .number {
+	text-shadow:		1px 1px 1px #555;
+}
+.countCell span {
+	display:			block;
+}
+.countCell .number {
+    color:              #18244A;
+	font-size:			50pt;
+	letter-spacing:		-5px;
+	font-weight:		bold;
+	font-family:		Arial Black, Verdana, Sans-serif;
+	text-shadow:		1px 1px 1px #fff;
+	line-height:		42pt;
+}
+.countCell .label {
+	font-size:			9pt;
+	margin-bottom:		10px;
+}

@@ -1,0 +1,85 @@
+@media only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (min--moz-device-pixel-ratio: 1.5), only screen and (-o-min-device-pixel-ratio: 3/2), only screen and (min-device-pixel-ratio: 1.5),only screen and (max-width: 320px) {
+    #page {
+        padding: 0 10px;
+    }
+    h1 small {
+        display: block;
+    }
+    .delete-form .btn-group {
+            display: block;
+    }
+    .delete-form .btn-group .btn {
+        width: 100%;
+        margin-bottom: 5px;
+    }
+    .delete-form .navbar-form {
+        float: none;
+    }
+}
+
+body {
+    padding-top: 50px;
+}
+#container {
+    margin-top: 20px;
+}
+#page {
+    min-height: 500px;
+}
+.small {
+    font-size: 8pt;
+}
+
+.breadcrumb {
+    margin: 20px 0;
+}
+
+.form-object {
+    margin-top: 20px;
+}
+
+.form-group .many {
+    padding-top:5px;
+}
+
+.form-group .many .many-item .elem {
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    cursor: pointer;
+    padding:2px 5px;
+}
+
+.form-group .many .many-item .elem:hover {
+    background: #428BCA;
+    color: #fff;
+}
+
+.form-group .many .many-item:last-of-type .separ {
+    display:none;
+}
+
+tr.action {
+    text-align: center;
+}
+
+.form-control {
+    /*width: 389px !important;*/
+}
+
+#citrus-signature {
+    position: fixed;
+    background: rgba(0, 0, 0, .1);
+    border-radius: 38px;
+    padding: 2px;
+    bottom: 10px;
+    right: 10px;
+}
+
+#loginForm {
+    width: 300px;
+    margin: 0 auto;
+}
+
+.form-group label.error {
+    color: #B94A48;
+}

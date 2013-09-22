@@ -1,0 +1,95 @@
+/*
+ * file uploader
+ */
+
+.qq-uploader { position:relative; width: 100%;}
+
+.qq-upload-button {
+    float:left;
+    text-align:center;    
+/*    background:             #d7d6d6 url(../../../images/icon-submit.png) no-repeat 7px 50%;*/
+    cursor:                 pointer;
+    
+    clear:              none;
+    display:            inline-block;
+    text-decoration:    none;
+    text-shadow:        0 -1px 0 rgba(0, 0, 0, 0.25);
+}
+.qq-upload-button-hover {
+    /*background: #0055CC none;*/
+}
+.qq-upload-button i {
+    margin: 0 5px 0 0;
+}
+.qq-upload-button > span {
+    display:            inline-block;
+        
+}
+.qq-upload-button-focus {outline:1px dotted black;}
+
+.qq-upload-drop-area {
+    position:absolute; top:0; left:0; width:100%; height:100%; min-height: 70px; z-index:2;
+    background:#FF9797; text-align:center; 
+}
+.qq-upload-drop-area span {
+    display:block; position:absolute; top: 50%; width:100%; margin-top:-8px; font-size:16px;
+}
+.qq-upload-drop-area-active {background:#FF7171;}
+
+.qq-upload-list {float:left; /* or inline-block */
+margin:0px 0px 0px 15px; padding:0; list-style:disc;}
+.qq-upload-list li { margin:0; padding:0; line-height:15px; font-size:12px;}
+.qq-upload-file, .qq-upload-spinner, .qq-upload-size, .qq-upload-cancel, .qq-upload-failed-text {
+    margin-right: 7px;
+}
+
+.qq-upload-file {}
+.qq-upload-spinner {
+    display:inline-block; 
+    background: url(../../../images/loading.gif); 
+    background-size: 15px 15px;
+    width:15px; 
+    height:15px; 
+    vertical-align:text-bottom;
+}
+.qq-upload-size,.qq-upload-cancel {font-size:11px;}
+
+.qq-upload-failed-text {display:none;}
+.qq-upload-fail .qq-upload-failed-text {display:inline;}
+
+
+div.televersement { display:inline-block; }
+div.retail {
+    padding:5px;
+    text-align:center;
+}
+
+div.retail img {
+    max-width:350px;
+    max-height:150px;
+    border:5px solid #ccc;
+}
+
+/*
+ * imgAreaSelect animated border style
+ */
+.imgareaselect-border1 { background: url(../../../images/imgareaselect/border-anim-v.gif) repeat-y left top; }
+.imgareaselect-border2 { background: url(../../../images/imgareaselect/border-anim-h.gif) repeat-x left top; }
+.imgareaselect-border3 { background: url(../../../images/imgareaselect/border-anim-v.gif) repeat-y right top; }
+.imgareaselect-border4 { background: url(../../../images/imgareaselect/border-anim-h.gif) repeat-x left bottom; }
+.imgareaselect-border1, .imgareaselect-border2,
+.imgareaselect-border3, .imgareaselect-border4 {
+    filter: alpha(opacity=50);
+    opacity: 0.5;
+}
+.imgareaselect-handle {
+    background-color: #fff;
+    border: solid 1px #000;
+    filter: alpha(opacity=50);
+    opacity: 0.5;
+}
+.imgareaselect-outer {
+    background-color: #000;
+    filter: alpha(opacity=50);
+    opacity: 0.5;
+}

@@ -1,0 +1,84 @@
+table.list {
+	/*border-collapse:	collapse;*/
+    width:              100%;
+}
+
+.list th {
+	background:			-moz-linear-gradient(center top , #ddd, #ededed) repeat scroll 0 0 transparent;
+    background:         -webkit-gradient(linear, left top, left bottom, from(#ddd), to(#ededed));
+	font-family:		Trebuchet MS, Arial, Verdana, Sans-serif;
+	color:				#333;
+    text-align:         left;
+    padding:            15px 5px;
+}
+.list th:first-child {
+	-moz-border-radius:		6px 0 0 0;
+	-webkit-border-radius:	6px 0 0 0;
+	border-radius:			6px 0 0 0;
+}
+.list th:last-child {
+	-moz-border-radius:		0 6px 0 0;
+	-webkit-border-radius:	0 6px 0 0;
+	border-radius:			0 6px 0 0;
+}
+
+.list tbody tr:nth-child(odd)   { 
+	background-color:	#f0f0f0; 
+}
+.list tr:nth-child(even) {
+	background-color:	#f7f7f7; 
+}
+.list tr:last-child {
+
+}
+.list tbody tr:hover td {
+    background:         #ddd;
+}
+.list tr td:first-child {
+
+}
+.list tr td:last-child {
+
+}
+.list tr td {
+    border:             1px solid #ddd;
+	border-width:		0 0 1px 0;
+    height:             36px;
+    padding:            5px;
+	font-size:			8pt;
+}
+
+.listAction {
+    width:              120px;
+}
+.list td.cellSelectToDelete {
+    width:              15px;
+}
+
+.list tfoot tr:nth-child(odd)   { 
+	background:			#fff;
+}
+.list tfoot tr td {
+	border:				none;
+}
+.list tfoot tr td:first-child {
+	border:				none;
+}
+
+.list th a:link, .list th a:visited {
+    color:              #333;
+    text-decoration:    none;
+}
+.list th a:hover {
+    text-decoration:    underline;
+}
+.list a.sorted {
+    b
+}
+
+.list a.asc {
+    
+}
+.list a.desc {
+    
+}

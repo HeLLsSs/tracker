@@ -1,0 +1,99 @@
+<div data-role="page" id="cos-object-list" class="container cos-list">
+    <div class="row">
+        <?php if ( isset( $sidebar ) ) include_slice_global( $sidebar ); ?>
+        <div<?php if ( isset( $sidebar ) ) echo ' class="col-lg-10"' ?>>
+            <ol class="breadcrumb">
+                <li><a href="<?php echo CITRUS_PROJECT_URL . $cos->app->name ?>/">Accueil</a></li>
+                <li><?php 
+                        echo ucfirst( $schema->pluralDescription ); 
+                ?></li>
+            </ol>
+            <h1>
+                Liste des <?php echo $schema->pluralDescription ?>
+                <?php $nbItems = count( $list ); ?>
+                <small><?php echo $nbItems . ' élément' . ( $nbItems > 0 ? $nbItems > 1 ? 's' : '' : '' ) ?></small>
+            </h1>
+            
+            <?php if ( count( $list ) == 0 ) { ?>
+                <?php if ( $cos->user->isadmin == '1' ) { ?>
+                <table class="table" cellspacing="0" cellpadding="0">
+                    <thead>
+                        <tr class="action">
+                            <td>
+                                <a href="<?php echo $cos->app->getControllerUrl() ?>edit" class="btn-add btn btn-primary">
+                                    Ajouter un<?php 
+                                        echo ( $schema->gender != 'm' ? 'e':'' ) . 
+                                        ' ' . $schema->description 
+                                    ?>
+                                </a>
+                            </td>
+                        </tr>
+                    </thead>
+                </table>
+                <?php } ?>
+                <p class="alert">
+                    Aucun<?php 
+                        echo ( $schema->gender != 'm' ? 'e' : '' ) . ' ' . $schema->description 
+                    ?> disponible
+                </p>
+                <?php } else {
+                    if ( $cos->user->isadmin == '1' )
+                        $resHead = array('<th class="sel"><input type="checkbox" /></th>');
+                    else $resHead = array();
+                    foreach ($schema->adminColumns as $chmp) {
+                        if ( isset( $schema->properties[$chmp] ) ) {
+                            $libelle = isset( $schema->properties[$chmp]['formLabel'] ) ? $schema->properties[$chmp]['formLabel'] : '?';
+                            $resHead[] = '<th class="sortable" rel="' .$chmp. '">' . $libelle . '</th>';
+                        }
+                        else if (isset( $schema->manyProperties[$chmp])) {
+                            $libelle = isset( $schema->manyProperties[$chmp]['formLabel'] ) ? $schema->manyProperties[$chmp]['formLabel'] : '?';
+                            $resHead[] = '<th>' . $libelle . '</th>';
+                        }
+                    } 
+                ?><form action="<?php echo $cos->app->getControllerUrl() ?>deleteSeveral" method="post" class="delete-form">
+                    <?php if ( $cos->user->isadmin == '1' ) { ?>
+                        <div class="navbar">
+                            <div class="navbar-form pull-left">
+                                <div class="btn-group">
+                                    <button type="submit" class="deleteSeveral btn btn-danger">
+                                        Supprimer les <?php echo $schema->pluralDescription ?>
+                                        sélectionné<?php echo $schema->gender != 'm' ? 'e':''?>s
+                                    </button>
+                                </div>
+                                <div class="btn-group">
+                                    <a href="<?php echo $cos->app->getControllerUrl() ?>edit" class="btn-add btn btn-primary">
+                                        Ajouter un<?php echo $schema->gender != 'm' ? 'e':''?>
+                                        <?php echo $schema->description ?>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="navbar-form pull-right">
+                                <input type="text" name="search" id="search" value="<?php echo $search ?>" class="form-control" placeholder="Rechercher" autocomplete="off" />
+                            </div>
+                        </div>
+                    <?php } ?>
+                    <div class="table-responsive">
+                        <table class="listing table table-striped table-hover" cellspacing="0" cellpadding="0">
+                            <thead>
+                                <tr><?php echo implode( '', $resHead ) ?></tr>
+                            </thead><?php
+                                include_slice( 'index-list', array(
+                                    'schema'    => $schema,
+                                    'list'      => $list,
+                                    'pager'     => $pager,
+                                    'search'    => $search,
+                                    'order'     => $order,
+                                    'orderType' => $orderType,
+                                ) );
+                            ?>
+                        </table>
+                    </div>
+                    <?php if ( $schema->orderColumnDefined ) { ?>
+                        <p class="alert alert-info">Vous pouvez ordonner les éléments du tableau en utilisant le glisser-déposer</p>
+                    <?php } ?>
+                </form>
+            <?php } ?>
+        </div>
+        <div class="merci-ie"></div>
+    </div>
+</div>
