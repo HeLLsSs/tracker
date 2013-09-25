@@ -105,7 +105,7 @@ class Controller {
      */ 
     public function __construct( $action, $path = '' ) {    
         $this->action = $action;
-        $this->request = new http\Request();
+        // $this->request = new http\Request();
         $this->template = new Template( $action );
         $this->path = $path;
     }
@@ -119,12 +119,12 @@ class Controller {
      * 
      * @see do_PageNotFound
      */
-    public function executeAction( $force_external_post = false ) {
-        if ( $this->request->method == 'POST' && !$this->request->refererIsInternal() && !$force_external_post ) {
+    public function executeAction( $request, $force_external_post = false ) {
+        $cos = Citrus::getInstance();
+        if ( $cos->request->method == 'POST' && !$cos->request->refererIsInternal() && !$force_external_post ) {
             $this->do_PageNotFound();
             return true;
         }
-        $cos = Citrus::getInstance();
 
         $action = "do_$this->action";
         // $response = new http\Response();
@@ -136,7 +136,7 @@ class Controller {
                 $cos->debug->startNewTimer( "action " . $action );
             }
             
-            $this->$action();
+            $this->$action( $request );
             // $cos->response->code = '200';
             // $response->sendHeaders();
             

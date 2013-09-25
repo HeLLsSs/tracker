@@ -40,8 +40,8 @@ class Debug {
     
     static $debug = false;
     
-    public function __construct() {
-        $this->request = new http\Request();
+    public function __construct( $request ) {
+        $this->request = $request;
     }
     
     public function getQueries() {

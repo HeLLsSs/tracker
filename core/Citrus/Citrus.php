@@ -180,6 +180,12 @@ class Citrus {
      * @var \core\Citrus\Http\Response
      */
     public $response;
+
+    /**
+     * @access public
+     * @var \core\Citrus\Http\Request
+     */
+    public $request;
     
     /**
      * Accessor
@@ -256,6 +262,7 @@ class Citrus {
                         $inst = $r->newInstanceArgs( $args ? $args : array() );
                         if ( $inst ) {
                             $this->host = $inst;
+                            $this->request = new http\Request();
                             $this->startServices();
                         } else {
                             throw new sys\Exception( "Provided host is not a valid Citrus host." );
@@ -596,7 +603,7 @@ class Citrus {
         $services = $this->host->services;
         if ($services['debug']['active']) {
             sys\Debug::$debug = true;
-            $this->debug = new sys\Debug();
+            $this->debug = new sys\Debug( $this->request );
             $this->debug->timer = new sys\Timer( "total" );
             $this->debug->timer->start();
         }

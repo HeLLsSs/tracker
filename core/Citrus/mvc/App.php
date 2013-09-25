@@ -185,7 +185,7 @@ class App {
         if ( !$this->isAccessAllowed() ) {
             $this->onActionProtected();
         } elseif ( $this->controller->actionExists() ) {
-            $act = $this->controller->executeAction( $force_external_post );
+            $act = $this->controller->executeAction( $cos->request, $force_external_post );
             if ( $act !== false ) $this->output();
         } else $this->onActionNotFound();
     }
