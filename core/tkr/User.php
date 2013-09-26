@@ -16,7 +16,9 @@ class User extends \core\Citrus\data\Model {
     // public $datemodified;
 
     public function __toString()  {
-        return (string) $this->firstname . ' ' . $this->lastname;
+        $str = (string) $this->firstname;
+        if ( !$this->isadmin ) $str .= ' ' . $this->lastname;
+        return $str;
     }
 
     private function fetchUser( $login, $password ) {
@@ -54,6 +56,10 @@ class User extends \core\Citrus\data\Model {
             $_SESSION['CitrusUser']         = $user;
         }
         return $user;
+    }
+
+    public function getProjects() {
+        // $col = $this->isadmin ? 'develo'
     }
     
 }

@@ -44,20 +44,20 @@ return array(
         'picture' => array(
             'type'          => 'string',
             'length'        => 255,
+            'null'          => true,
+            // 'formLabel'     => 'Image',
+            // 'inputType'     => 'InputFile',
+        ),
+        'isadmin' => array(
+            'type'          => 'boolean',
             'null'          => false,
-            'formLabel'     => 'Image',
-            'inputType'     => 'InputFile',
+            'formLabel'     => 'Développeur',
+            'inputType'     => 'CheckBox',
         ),
         'valid' => array(
             'type'          => 'boolean',
             'null'          => false,
             'formLabel'     => 'Actif',
-            'inputType'     => 'CheckBox',
-        ),
-        'isadmin' => array(
-            'type'          => 'boolean',
-            'null'          => false,
-            'formLabel'     => 'Administrateur',
             'inputType'     => 'CheckBox',
         ),
         'datecreated' => array(
@@ -70,7 +70,7 @@ return array(
             'null'          => false,
         ),
     ),
-    'adminColumns' => array( 'lastname', 'firstname', 'email', 'active', 'datecreated' ),
+    'adminColumns' => array( 'lastname', 'firstname', 'isadmin', 'email', 'active', 'datecreated' ),
     'orderColumn' => 'lastname ASC, firstname ASC',
     'linkColumns' => Array( 'lastname' ),
 );
