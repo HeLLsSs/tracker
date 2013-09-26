@@ -22,8 +22,7 @@ class Ticket extends \core\Citrus\data\Model {
     const STATUS_ASSIGNED       = 2;
     const STATUS_CLIENT_WAITING = 3;
     const STATUS_FIXED          = 4;
-    const STATUS_TREATED        = 5;
-    const STATUS_ABORTED        = 6;
+    const STATUS_ABORTED        = 5;
 
     const TYPE_BUG              = 1;
     const TYPE_TASK             = 2;
@@ -48,9 +47,6 @@ class Ticket extends \core\Citrus\data\Model {
                 break;
             case self::STATUS_FIXED:
                 return 'Résolu';
-                break;
-            case self::STATUS_CLOSED:
-                return 'Fermé';
                 break;
             case self::STATUS_ABORTED:
                 return 'Abandonné';
@@ -82,7 +78,7 @@ class Ticket extends \core\Citrus\data\Model {
     }
 
     public function getPriority() {
-        switch ( intval( $this->type ) ) {
+        switch ( intval( $this->priority ) ) {
             case self::PRIORITY_NORMAL:
                 return 'Normal';
                 break;
@@ -109,7 +105,6 @@ class Ticket extends \core\Citrus\data\Model {
             self::STATUS_ASSIGNED         => 'En cours',
             self::STATUS_CLIENT_WAITING   => 'En attente client',
             self::STATUS_FIXED            => 'Résolu',
-            self::STATUS_TREATED          => 'Traité',
             self::STATUS_ABORTED          => 'Abandonné',
         );
     }

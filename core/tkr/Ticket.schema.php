@@ -60,12 +60,12 @@ return array(
             'type'              => 'int',
             'null'              => false,
             'formLabel'         => 'État',
-            'inputType'         => 'SelectOne',
+            // 'inputType'         => 'SelectOne',
             'options'           => Array(
                 1 => 'En attente',
-                2 => 'Assigné (en cours)',
+                2 => 'En cours',
                 3 => 'En attente client',
-                4 => 'Validé',
+                4 => 'Résolu',
                 5 => 'Annulé',
             ),
         ),
@@ -110,7 +110,7 @@ return array(
             'foreignReference'  => 'id',
         ),
     ),*/
-    'adminColumns' => array( 'title', 'project_id', 'type', 'status', 'priority', 'author_id', 'datecreated' ),
+    'adminColumns' => array( 'title', 'type', 'status', 'priority', 'author_id', 'developer_id', 'datecreated' ),
     'orderColumn' => 'datecreated DESC',
     'linkColumns' => Array( 'title' ),
 );
