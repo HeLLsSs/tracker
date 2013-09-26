@@ -1,3 +1,11 @@
+@highdensity:   ~"only screen and (-webkit-min-device-pixel-ratio: 1.5)",
+                ~"only screen and (min--moz-device-pixel-ratio: 1.5)",
+                ~"only screen and (-o-min-device-pixel-ratio: 3/2)",
+                ~"only screen and (min-device-pixel-ratio: 1.5)";
+
+@mobile:        ~"only screen and (max-width: 320px)";
+@mobile-lanscape:        ~"only screen and (max-width: 480px)";
+
 .listing-bugs {
     margin-top: 20px;
 }
@@ -21,10 +29,47 @@
     }
 }
 
-#projet-panel {
+#ticket-status {
     margin-top: 40px;
 }
 
 .dropdown-menu > li > a.active {
     font-weight: bold;
+}
+
+#ticket-description {
+    font-size: 12px;
+}
+
+#bugs-list .listing {
+    font-size: 13px;
+}
+
+@media @mobile, @mobile-lanscape {
+    #bugs-list .listing {
+        font-size: 12px;
+    }
+
+    h1 {
+        font-size: 24px;
+        small {
+            font-size: 14px;
+        }
+    }
+
+    #projet-panel .col-xs-12 {
+        // padding: 0;
+    }
+
+    #citrus-signature {
+        display: none;
+    }
+
+    .back-btn {
+        margin: 10px 0 0;
+    }
+
+    #status-switch, #status-switch button, ul.status-changer {
+        width: 100%
+    }
 }

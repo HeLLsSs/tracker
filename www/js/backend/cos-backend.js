@@ -12,7 +12,11 @@ CosBackend.prototype = {
     init: function() {
         this.main_frame = $('#page');
         this.navbar = $('#main-nav');
-        this.ajax_links = ['#main-nav a', '.listing a', '.btn-add', '.form-object .btn-cancel', '.breadcrumb a'];
+        this.ajax_links = [
+            '#main-nav a', '.listing a', 
+            '.btn-add', '.form-object .btn-cancel', 
+            '.breadcrumb a', '.back-btn a'
+        ];
 
         var self = this;
 

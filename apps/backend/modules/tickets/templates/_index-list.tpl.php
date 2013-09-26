@@ -1,10 +1,7 @@
 <?php
 $resBody = array();
 foreach ( $list as $object ) {
-    if ( $cos->user->isadmin == '1' ) {
-        // $resTr = array('<td><input type="checkbox" name="delete[]" value="' . $object->id . '" /></td>');
-        $resTr = Array();
-    } else $resTr = '';
+    $resTr = array();
     foreach ( $schema->adminColumns as $chmp ) {
         $sch_props = $schema->properties;
         if ( isset( $sch_props[$chmp] ) ) {
@@ -26,7 +23,7 @@ foreach ( $list as $object ) {
                 $str = ""; 
             }
             if ( $is_lnk ) {
-                $str = '<a href="' . $cos->app->getControllerUrl() . $object->id . '/view">' . $str . '</a>';
+                $str = '<a href="' . $cos->app->getControllerUrl() . $object->id . '/edit">' . $str . '</a>';
                 if ( date( 'U' ) - $object->datecreated->format( 'U' ) < ( 60 * 60 * 24 * 2 ) ) {
                     $str .= ' <span class="label label-warning">new</span>';
                 }
@@ -37,7 +34,7 @@ foreach ( $list as $object ) {
         } else if ( isset( $schema->manyProperties[$chmp] ) ) {
             $str = count( $object->$chmp );
             if ( in_array( $chmp, $schema->linkColumns ) ) {
-                $str = '<a href="' . $cos->app->getControllerUrl() . $object->id . '/view">' . $str . '</a>';
+                $str = '<a href="' . $cos->app->getControllerUrl() . $object->id . '/edit">' . $str . '</a>';
             }
             $resTr[] = '<td>' . $str . '</td>';
         }

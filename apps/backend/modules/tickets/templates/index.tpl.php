@@ -14,33 +14,14 @@
                 <small><?php echo $nbItems . ' élément' . ( $nbItems > 0 ? $nbItems > 1 ? 's' : '' : '' ) ?></small>
             </h1>
             
-            <?php if ( count( $list ) == 0 ) { ?>
-                <?php if ( $cos->user->isadmin == '1' ) { ?>
-                <table class="table" cellspacing="0" cellpadding="0">
-                    <thead>
-                        <tr class="action">
-                            <td>
-                                <a href="<?php echo $cos->app->getControllerUrl() ?>edit" class="btn-add btn btn-primary">
-                                    Ajouter un<?php 
-                                        echo ( $schema->gender != 'm' ? 'e':'' ) . 
-                                        ' ' . $schema->description 
-                                    ?>
-                                </a>
-                            </td>
-                        </tr>
-                    </thead>
-                </table>
-                <?php } ?>
+            <?php if (count( $list ) == 0 ) { ?>
                 <p class="alert">
                     Aucun<?php 
                         echo ( $schema->gender != 'm' ? 'e' : '' ) . ' ' . $schema->description 
                     ?> disponible
                 </p>
                 <?php } else {
-                    if ( $cos->user->isadmin == '1' )
-                        // $resHead = array('<th class="sel"><input type="checkbox" /></th>');
-                        $resHead = array();
-                    else $resHead = array();
+                    $resHead = array();
                     foreach ($schema->adminColumns as $chmp) {
                         if ( isset( $schema->properties[$chmp] ) ) {
                             $libelle = isset( $schema->properties[$chmp]['formLabel'] ) ? $schema->properties[$chmp]['formLabel'] : '?';
@@ -52,27 +33,19 @@
                         }
                     } 
                 ?><form action="<?php echo $cos->app->getControllerUrl() ?>deleteSeveral" method="post" class="delete-form">
-                    <?php if ( $cos->user->isadmin == '1' ) { ?>
-                        <div class="navbar">
-                            <div class="navbar-form pull-left">
-                                <div class="btn-group">
-                                    <?php /*<button type="submit" class="deleteSeveral btn btn-danger">
-                                        Supprimer les <?php echo $schema->pluralDescription ?>
-                                        sélectionné<?php echo $schema->gender != 'm' ? 'e':''?>s
-                                    </button>*/ ?>
-                                </div>
-                                <div class="btn-group">
-                                    <a href="<?php echo $cos->app->getControllerUrl() ?>edit" class="btn-add btn btn-primary">
-                                        Ajouter un<?php echo $schema->gender != 'm' ? 'e':''?>
-                                        <?php echo $schema->description ?>
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="navbar-form pull-right">
-                                <input type="text" name="search" id="search" value="<?php echo $search ?>" class="form-control" placeholder="Rechercher" autocomplete="off" />
+                    <div class="navbar">
+                        <div class="navbar-form pull-left">
+                            <div class="btn-group">
+                                <?php /*<button type="submit" class="deleteSeveral btn btn-danger">
+                                    Supprimer les <?php echo $schema->pluralDescription ?>
+                                    sélectionné<?php echo $schema->gender != 'm' ? 'e':''?>s
+                                </button> */ ?>
                             </div>
                         </div>
-                    <?php } ?>
+                        <div class="navbar-form pull-right">
+                            <input type="text" name="search" id="search" value="<?php echo $search ?>" class="form-control" placeholder="Rechercher" autocomplete="off" />
+                        </div>
+                    </div>
                     <div class="table-responsive">
                         <table class="listing table table-striped table-hover" cellspacing="0" cellpadding="0">
                             <thead>

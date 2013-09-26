@@ -2,9 +2,8 @@
 <html lang="fr">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>
-        Administration - 
         <?php echo $cos->siteName ?>
     </title>
     <?php echo $this->displayStylesheets() ?>
@@ -27,6 +26,7 @@
     <?php if ( $cos->debug ) { echo $cos->debug->debugBar(); } ?>
     <script type="text/javascript">
         var rootUrl = '<?php echo CITRUS_PROJECT_URL ?>';
+        var less = {env: 'development'};
     </script>
     <?php echo $this->displayJavascriptFiles() ?>
 </body>

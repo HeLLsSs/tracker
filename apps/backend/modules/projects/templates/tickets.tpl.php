@@ -1,5 +1,5 @@
 <div id="cos-object-list" class="cos-list">
-    <?php if ( count( $list ) == 0 ) { ?>
+    <?php if ( count( $tickets ) == 0 ) { ?>
         <p class="alert">
             Aucun<?php 
                 echo ( $schema->gender != 'm' ? 'e' : '' ) . ' ' . $schema->description 
@@ -25,7 +25,7 @@
             </thead><?php
                 include_slice( 'tickets_list', array(
                     'schema'    => $schema,
-                    'list'      => $list,
+                    'list'      => $tickets,
                     'pager'     => $pager,
                     'search'    => $search,
                     'order'     => $order,

@@ -27,17 +27,18 @@
                     </ul> -->
                 </li>
 
-                <li<?php if ( $module->name == "tickets" ) echo ' class="active"' ?>>
-                    <a href="<?php echo CITRUS_PROJECT_URL . 'backend/tickets/'; ?>">
-                        Tickets
-                    </a>
-                </li>
-
-                <li<?php if ( $module->name == "users" ) echo ' class="active"' ?>>
-                    <a href="<?php echo CITRUS_PROJECT_URL . 'backend/users/'; ?>">
-                        Utilisateurs
-                    </a>
-                </li>
+                <?php if ( $cos->user->isadmin == 1 ) { ?>
+                    <li<?php if ( $module->name == "tickets" ) echo ' class="active"' ?>>
+                        <a href="<?php echo CITRUS_PROJECT_URL . 'backend/tickets/'; ?>">
+                            Tickets
+                        </a>
+                    </li>
+                    <li<?php if ( $module->name == "users" ) echo ' class="active"' ?>>
+                        <a href="<?php echo CITRUS_PROJECT_URL . 'backend/users/'; ?>">
+                            Utilisateurs
+                        </a>
+                    </li>
+                <?php } ?>
             </ul>
             <ul class="nav navbar-nav pull-right">
                 <li class="logout"><?php echo link_to( 

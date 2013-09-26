@@ -3,7 +3,7 @@
         <div class="container">
             <?php if ( isset( $sidebar ) ) include_slice_global( $sidebar ); ?>
             <div<?php if ( isset( $sidebar ) ) echo ' class="col-lg-10"' ?>>
-                <ol class="breadcrumb">
+                <ol class="breadcrumb hidden-xs">
                     <li><a href="<?php echo CITRUS_PROJECT_URL . $cos->app->name ?>/">Accueil</a></li>
                     <li>
                         <a href="<?php echo CITRUS_PROJECT_URL . $cos->app->name . '/' . $cos->app->controller->name ?>/"><?php 
@@ -19,7 +19,7 @@
                     d'un<?php echo ( $schema->gender != 'm' ? 'e ' : ' ' ) . $schema->description ?>
                 </h1>
                 <form class="form-object" action="save" method="post" class="form-horizontal">
-                    <?php echo $res->displayForm() ?>
+                    <?php echo $form->render() ?>
                     <p class="formActions">
                         <a class="btn-cancel btn btn-danger" href="/<?php 
                             echo $cos->app->name . '/' . $cos->app->controller->name . '/' 

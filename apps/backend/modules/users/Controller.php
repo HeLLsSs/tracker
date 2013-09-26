@@ -11,16 +11,16 @@ class Controller extends mvc\ObjectController {
     public $is_protected = true;
     public $security_exceptions = Array( 'login', 'logout' );
 
-    public function do_login() {
+    public function do_login( $request ) {
         $cos = Citrus::getInstance();
         if ( $cos->user->isLogged() ) {
             http\Http::redirect( '/backend/projects/' );
         }
         $redir = $cos->projectName . '_REDIRECT_URI';
         $this->pageTitle = 'Administration';
-        if ( $this->request->method == 'POST' ) {
-            $login = $this->request->param( 'email', 'string' );
-            $password = $this->request->param( 'password', 'string' );
+        if ( $request->method == 'POST' ) {
+            $login = $request->param( 'email', 'string' );
+            $password = $request->param( 'password', 'string' );
 
             if ( $cos->user->login( $login, $password ) ) {
                 /*if (isset($_SESSION[$redir])) {
@@ -34,19 +34,19 @@ class Controller extends mvc\ObjectController {
         }
     }
     
-    public function do_logout() {
+    public function do_logout( $request ) {
         $cos = Citrus::getInstance();
         unset( $cos );
         session_destroy();
         http\Http::redirect( CITRUS_PROJECT_URL . 'backend/login' );
     }
     
-    public function do_checkAvailable() {
-        if ( $this->request->method == 'POST' ) {
+    public function do_checkAvailable( $request ) {
+        if ( $request->method == 'POST' ) {
             $cos = Citrus::getInstance();
             
             $this->layout = false;
-            $data = $this->request->param( 'value', FILTER_SANITIZE_STRING );
+            $data = $request->param( 'value', FILTER_SANITIZE_STRING );
             if ( $data ) {
                 $test = $cos->db->execute(
                     "SELECT `login` 
@@ -62,27 +62,56 @@ class Controller extends mvc\ObjectController {
             exit;
         }
     }
-    
-    public function do_save() {
+
+    public function do_index( $request ) {
         $cos = Citrus::getInstance();
-        if ( $this->request->method == 'POST' ) {
-            $type = $this->request->param( 'modelType', FILTER_SANITIZE_STRING );
+        if ( $cos->user->isadmin != '1' ) {
+            Citrus::pageNotFound();
+        } else parent::do_index( $request );
+    }
+
+    public function do_edit( $request ) {
+        $cos = Citrus::getInstance();
+        if ( $cos->user->isadmin != '1' ) {
+            Citrus::pageNotFound();
+        } else parent::do_edit( $request );
+    }
+    
+    /*public function do_save( $request ) {
+        $cos = Citrus::getInstance();
+        if ( $request->method == 'POST' ) {
+            $type = $request->param( 'modelType', 'string' );
+            vexp($request);exit;
             if ( class_exists( $type ) ) {
                 $inst = new $type();
                 $inst->hydrateByFilters();
-                $pass1 = $this->request->param( 'password1', FILTER_SANITIZE_STRING );
-                $pass2 = $this->request->param( 'password2', FILTER_SANITIZE_STRING );
+                $pass1 = $request->param( 'password1', 'string' );
+                $pass2 = $request->param( 'password2', 'string' );
                 if ( $pass1 === $pass2 ) {
                     $inst->args['password'] = md5( $pass1 );
                 }
                 $rec = $inst->save();
-                #vexp($rec);exit();
+                vexp($rec);exit();
 
-                $loc = CITRUS_PROJECT_URL . "{$cos->app->name}/{$cos->router->module}/index.html";
-                Citrus_Http::redirect( $loc );
+                if ( $request->isXHR ) {
+                    $this->template = new \core\Citrus\mvc\Template( 'json-response' );
+                    $this->layout = false;
+                    if ( $rec ) {
+                        $this->template->assign('status', "success");
+                        $response['status'] = "success";
+                        $response['return_url'] = $cos->app->getControllerUrl();
+                    } else {
+                        $response['status'] = "error";
+                    }
+                    $cos->response->contentType = "application/json";
+                    $this->template->assign( 'response', $response );
+                } else {
+                    $loc = $cos->app->getControllerUrl();
+                    http\Http::redirect( $loc );
+                }
             }
         } else {
             die( 'Bad method request' );
         }
-    }
+    }*/
 }

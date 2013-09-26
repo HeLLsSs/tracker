@@ -15,7 +15,7 @@ $this->isAccessAllowed  = function() use( &$self ) {
     
     if ( isset( $_SESSION['CitrusUser'] ) && get_class( $_SESSION['CitrusUser'] ) ) {
         $cos->user = $_SESSION['CitrusUser'];
-    } if ( isset($_SESSION['CitrusUserId'] ) ) {
+    } if ( isset($_SESSION['CitrusUserId'] ) && filter_var( $_SESSION['CitrusUserId'], FILTER_VALIDATE_INT ) ) {
         $cos->user = \core\Citrus\data\Model::selectOne(
             '\core\tkr\User', (integer) $_SESSION['CitrusUserId']);
         if ( !$cos->user ) $cos->user = new \core\tkr\User();

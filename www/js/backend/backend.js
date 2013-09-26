@@ -23,6 +23,10 @@ $(document).ready(function() {
 
     $('#page').on('hide', '#cos-object-form', function() {
         console.log('hiding page #edit-form');
+        tinyMCE.editors = [];
+        /*for (var i in tinyMCE.editors) {
+            tinyMCE.editors[i].destroy();
+        }*/
     });
     $('[data-role="page"]').trigger('show');
 });

@@ -1,6 +1,6 @@
 <div class="panel panel-default search-filters">
     <form class="panel-body form-inline" method="post" action="<?php 
-        echo CITRUS_PROJECT_URL . $cos->app->name ?>/projects/<?php echo $res->id ?>/tickets">
+        echo CITRUS_PROJECT_URL . $cos->app->name ?>/projects/<?php echo $res->id ?>/view">
         <fieldset>
             <div class="form-group">
                 <input type="text" 
@@ -96,6 +96,37 @@
                         value="<?php echo \core\tkr\Ticket::TYPE_REQUEST ?>"
                         id="type_<?php echo \core\tkr\Ticket::TYPE_REQUEST ?>">
                     Requête
+                </label>
+            </div>
+        </fieldset>
+
+        <fieldset>
+            <legend>Priorité</legend>
+            <div class="form-group">
+                <label for="priority_<?php echo \core\tkr\Ticket::PRIORITY_NORMAL ?>">
+                    <input type="checkbox" 
+                        name="priority[]" 
+                        value="<?php echo \core\tkr\Ticket::PRIORITY_NORMAL ?>"
+                        id="priority_<?php echo \core\tkr\Ticket::PRIORITY_NORMAL ?>">
+                    Normal
+                </label>
+            </div>
+            <div class="form-group">
+                <label for="priority_<?php echo \core\tkr\Ticket::PRIORITY_URGENT ?>">
+                    <input type="checkbox" 
+                        name="priority[]" 
+                        value="<?php echo \core\tkr\Ticket::PRIORITY_URGENT ?>"
+                        id="priority_<?php echo \core\tkr\Ticket::PRIORITY_URGENT ?>">
+                    Urgent
+                </label>
+            </div>
+            <div class="form-group">
+                <label for="priority_<?php echo \core\tkr\Ticket::PRIORITY_BLOCKING ?>">
+                    <input type="checkbox" 
+                        name="priority[]" 
+                        value="<?php echo \core\tkr\Ticket::PRIORITY_BLOCKING ?>"
+                        id="priority_<?php echo \core\tkr\Ticket::PRIORITY_BLOCKING ?>">
+                    Bloquant
                 </label>
             </div>
         </fieldset>

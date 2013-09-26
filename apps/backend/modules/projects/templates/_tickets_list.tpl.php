@@ -1,12 +1,31 @@
-<?php
-$resBody = array();
-foreach ( $list as $object ) {
+<?php if ( count( $tickets ) == 0 ) { ?>
+    <p class="alert">
+        Aucun<?php 
+            echo ( $schema_tkt->gender != 'm' ? 'e' : '' ) . ' ' . $schema_tkt->description 
+        ?>.
+    </p>
+<?php } else {
+        $resHead = array();
+        foreach ($schema_tkt->adminColumns as $chmp) {
+            if ( isset( $schema_tkt->properties[$chmp] ) ) {
+                $libelle = isset( $schema_tkt->properties[$chmp]['formLabel'] ) ? $schema_tkt->properties[$chmp]['formLabel'] : '?';
+                $resHead[] = '<th class="sortable" rel="' .$chmp. '">' . $libelle . '</th>';
+            }
+            else if (isset( $schema_tkt->manyProperties[$chmp])) {
+                $libelle = isset( $schema_tkt->manyProperties[$chmp]['formLabel'] ) ? $schema_tkt->manyProperties[$chmp]['formLabel'] : '?';
+                $resHead[] = '<th>' . $libelle . '</th>';
+            }
+        } 
+
+
+        $resBody = array();
+foreach ( $tickets as $object ) {
     $resTr = '';
-    foreach ( $schema->adminColumns as $chmp ) {
-        $sch_props = $schema->properties;
+    foreach ( $schema_tkt->adminColumns as $chmp ) {
+        $sch_props = $schema_tkt->properties;
         if ( isset( $sch_props[$chmp] ) ) {
             $prop = $sch_props[$chmp];
-            $is_lnk = in_array( $chmp, $schema->linkColumns );
+            $is_lnk = in_array( $chmp, $schema_tkt->linkColumns );
 
             if ( isset( $prop['modelType'] ) ) {
                $chmp= substr( $chmp, 0, -3 );
@@ -34,9 +53,12 @@ foreach ( $list as $object ) {
             if ( $chmp == "priority" ) {
                 switch ( $object->priority ) {
                     case \core\tkr\Ticket::PRIORITY_NORMAL:
-                        $label_class = ' label-warning';
+                        $label_class = ' label-default';
                         break;
                     case \core\tkr\Ticket::PRIORITY_URGENT:
+                        $label_class = ' label-warning';
+                        break;
+                    case \core\tkr\Ticket::PRIORITY_BLOCKING:
                         $label_class = ' label-danger';
                         break;
                     default:
@@ -47,9 +69,9 @@ foreach ( $list as $object ) {
             }
             $resTr[] = '<td>' . $str . '</td>';
 
-        } else if ( isset( $schema->manyProperties[$chmp] ) ) {
+        } else if ( isset( $schema_tkt->manyProperties[$chmp] ) ) {
             $str = count( $object->$chmp );
-            if ( in_array( $chmp, $schema->linkColumns ) ) {
+            if ( in_array( $chmp, $schema_tkt->linkColumns ) ) {
                 $str = '<a href="' . 
                         CITRUS_PROJECT_URL . $cos->app->name . 
                         '/tickets/' . $object->id . '/view">' . $str . '</a>';
@@ -59,14 +81,22 @@ foreach ( $list as $object ) {
     }
     $resBody[] = '<tr id="enreg_' . $object->id . '">' . implode('', $resTr ) . '</tr>';
 } 
-
-?><tbody<?php if ( $schema->orderColumnDefined ) echo 'class="sortable"' ?>>
-    <?php echo implode( chr( 10 ), $resBody ) ?>
-</tbody>
-<tfoot>
-    <tr class="action">
-        <td colspan="<?php echo count( $schema->adminColumns ) + 1 ?>">
-           <?php echo $pager->displayPager() ?>
-        </td>
-    </tr>
-</tfoot>
+?>
+    <div class="table-responsive">
+        <table class="listing table table-striped table-hover" cellspacing="0" cellpadding="0">
+            <thead>
+                <tr><?php echo implode( '', $resHead ) ?></tr>
+            </thead>
+            <tbody<?php if ( $schema_tkt->orderColumnDefined ) echo 'class="sortable"' ?>>
+                <?php echo implode( chr( 10 ), $resBody ) ?>
+            </tbody>
+            <tfoot>
+                <tr class="action">
+                    <td colspan="<?php echo count( $schema_tkt->adminColumns ) + 1 ?>">
+                       <?php echo $pager->displayPager() ?>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+<?php } ?>
