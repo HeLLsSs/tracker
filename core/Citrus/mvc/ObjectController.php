@@ -31,6 +31,7 @@ use \core\Citrus\Citrus;
 use core\Citrus\http;
 use core\Citrus\sys;
 use core\Citrus\data;
+use \core\Citrus\html\form\Form;
 
 /**
  * Extends Controller to provide model-related actions
@@ -90,8 +91,10 @@ class ObjectController extends Controller {
         } else {
             $res = new $this->className();
         }
-        $res->generateForm();
+        $form = Form::generateForm( $res );
+
         $this->template->assign( 'res', $res );
+        $this->template->assign( 'form', $form );
         $this->template->assign( 'schema', $schema );
         $this->template->assign( 'layout', $this->layout );
     }
@@ -113,7 +116,7 @@ class ObjectController extends Controller {
                 Citrus::pageNotFound();
             }
         } else {
-            #vexp($_POST);
+            // vexp($_POST, true);exit;
             $type = $request->param( 'modelType', 'string' );
 
             if ( class_exists( $type ) ) {
@@ -135,7 +138,7 @@ class ObjectController extends Controller {
                 $rec = $inst->save();
                 $inst->hydrateManyByFilters();
                 
-                #vexp($rec);exit();
+                // vexp($inst);exit();
                 if ( $request->isXHR ) {
                     $this->template = new \core\Citrus\mvc\Template( 'json-response' );
                     $this->layout = false;
