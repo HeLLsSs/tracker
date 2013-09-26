@@ -74,15 +74,19 @@ return array(
             'modelType'         => '\core\tkr\User',
             'foreignTable'      => 'tkr_user',
             'foreignReference'  => 'id',
+            'conditions'        => Array(
+                'isadmin = 0',
+                'valid = 1'
+            ),
         ),
-        'devs' => array(
+        /*'devs' => array(
             'formLabel'         => 'Développeurs',
             'modelType'         => '\core\tkr\User',
             'foreignTable'      => 'tkr_user',
             'foreignReference'  => 'id',
-        ),
+        ),*/
     ),
-    'adminColumns' => array( 'name', 'state', 'datecreated' ),
+    'adminColumns' => array( 'name', 'status', 'datecreated' ),
     'orderColumn' => 'datecreated DESC',
     'linkColumns' => Array( 'name' ),
 );

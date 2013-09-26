@@ -5,16 +5,16 @@ use \core\Citrus;
 
 class Project extends \core\Citrus\data\Model {
     public $id;
-    public $name;
-    public $description;
-    public $url_dev;
-    public $url_preprod;
-    public $url_prod;
-    public $status;
+    private $name;
+    private $description;
+    private $url_dev;
+    private $url_preprod;
+    private $url_prod;
+    private $status;
     // public $datecreated;
     // public $datemodified;
-    public $users;
-    public $devs;
+    private $users;
+    // private $devs;
 
     const PROJECT_STATUS_WAITING    = 0;
     const PROJECT_STATUS_RUNNING    = 1;
@@ -29,9 +29,9 @@ class Project extends \core\Citrus\data\Model {
             case 'users': 
                 return $this->getUsers();
                 break;
-            case 'devs': 
+            /*case 'devs': 
                 return $this->getDevs();
-                break;
+                break;*/
             default: 
                 if ( property_exists( $this, $name ) ) return $this->$name;
                 else return parent::__get( $name );
@@ -46,11 +46,11 @@ class Project extends \core\Citrus\data\Model {
                     is_array( $value ) ? $value : ( $value == '' ? array() : explode( ',' ,$value ) ) 
                 ); 
                 break;
-            case 'devs' : 
+            /*case 'devs' : 
                 return $this->setDevs(
                     is_array( $value ) ? $value : ( $value == '' ? array() : explode( ',' ,$value ) ) 
                 ); 
-                break;
+                break;*/
             default :
                 if ( property_exists( $this, $name ) ) $this->$name = $value;
                 else return parent::__set( $name, $value );
@@ -61,17 +61,14 @@ class Project extends \core\Citrus\data\Model {
 
     public function getUsers() {
         if ( !$this->id ) return Array();
-        if ( count( $this->credentials ) == 0 ) {
-            $lst = Citrus\data\Model::selectAllWhere(
-                '\core\tkr\ProjectUser', 
-                Array( 
-                    "project_id = " . $this->id,
-                    'isadmin = 0',
-                    'valid = 1'
-                ) 
-            );
+        if ( count( $this->users ) == 0 ) {
+            $lst = new Citrus\data\ModelCollection( '\core\tkr\ProjectUser' );
+            $lst->query->addWhere( "project_id = " . $this->id );
+            $lst->query->addWhere( "i0.isadmin = 0" );
+            $lst->query->addWhere( "i0.valid = 1" );
+            $lst->fetch();
             $this->users = Array();
-            foreach ( $lst as $item ) $this->users[] = $item->user->hydrateAssoc();
+            foreach ( $lst->items as $item ) $this->users[] = $item->user->hydrateAssoc();
         }
         return $this->users;
     }
@@ -94,21 +91,18 @@ class Project extends \core\Citrus\data\Model {
         }
     }
 
-    public function getDevs() {
+    /*public function getDevs() {
         if ( !$this->id ) return Array();
-        if ( count( $this->credentials ) == 0 ) {
-            $lst = Citrus\data\Model::selectAllWhere(
-                '\core\tkr\ProjectDev', 
-                Array( 
-                    "project_id = " . $this->id, 
-                    "isadmin = 1",
-                    'valid = 1'
-                ) 
-            );
-            $this->users = Array();
-            foreach ( $lst as $item ) $this->users[] = $item->user->hydrateAssoc();
+        if ( count( $this->devs ) == 0 ) {
+            $lst = new Citrus\data\ModelCollection( '\core\tkr\ProjectDev' );
+            $lst->query->addWhere( "project_id = " . $this->id );
+            $lst->query->addWhere( "i0.isadmin = 1" );
+            $lst->query->addWhere( "i0.valid = 1" );
+            $lst->fetch();
+            $this->devs = Array();
+            foreach ( $lst->items as $item ) $this->devs[] = $item->dev->hydrateAssoc();
         }
-        return $this->users;
+        return $this->devs;
     }
     
     private function setDevs( $listIds = array() ) {
@@ -120,14 +114,13 @@ class Project extends \core\Citrus\data\Model {
             "DELETE FROM " . $schema->tableName . "
             WHERE project_id = '" . $this->id . "'"
         );
-        
         foreach ( $listIds as $id ) {
             $lnk = new $targetClass();
-            $lnk->user_id = $id;
+            $lnk->dev_id = $id;
             $lnk->project_id = $this->id;
             $lnk->save();
         }
-    }
+    }*/
 
     public function countTickets() {
         $c = new Citrus\data\ModelCollection( '\core\tkr\Ticket' );
