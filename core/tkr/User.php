@@ -2,6 +2,8 @@
 
 namespace core\tkr;
 use \core\Citrus\Citrus;
+use \core\Citrus\data;
+use \core\Citrus\db;
 
 class User extends \core\Citrus\data\Model {
     const TABLENAME = 'tkr_user';
@@ -58,8 +60,13 @@ class User extends \core\Citrus\data\Model {
         return $user;
     }
 
-    public function getProjects() {
+    public function getProjectsIds() {
         // $col = $this->isadmin ? 'develo'
+        $q = new db\SelectQuery();
+        $q->table = 'tkr_projectuser';
+        $q->columns = Array( 'project_id' );
+        $q->addWhere( 'user_id = ' . $this->id );
+        return $q->execute()->fetchAll( \PDO::FETCH_COLUMN );
     }
     
 }

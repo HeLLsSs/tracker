@@ -2,7 +2,6 @@
 
 namespace apps\backend\modules\projects;
 use \core\Citrus\mvc;
-// use \core\Citrus;
 use \core\Citrus\Citrus;
 use \core\Citrus\data;
 use \core\Citrus\mvc\Template;
@@ -37,11 +36,20 @@ class Controller extends mvc\ObjectController {
                     $where[] = "$cols LIKE '%$search%'"; 
                 }
             }
-            $list = $pager->getCollection( 
-                $where,
-                isset( $order ) ? $order : false, 
-                isset( $orderType ) ? $orderType : false
-            );
+            $project_ids = $cos->user->getProjectsIds();
+            if ( $project_ids ) {
+                $where[] = 'id IN (' . implode( ',', $project_ids ) . ')';
+            }
+            if ( !$project_ids && !$cos->user->isadmin ) {
+                $list = Array();
+            } else {
+
+                $list = $pager->getCollection( 
+                    $where,
+                    isset( $order ) ? $order : false, 
+                    isset( $orderType ) ? $orderType : false
+                );
+            }
             
             // $this->template = new Template( '_index-list' );
             $this->template->assign( 'search', $search );
@@ -59,18 +67,24 @@ class Controller extends mvc\ObjectController {
         $schema_product = data\Model::getSchema( $this->className );
         $this->layout = !$request->isXHR;
         $id = $request->param( 'id', 'int' );
+
+        // "filters" is read in uri by the router
+        // pattern example : /status:1,2/type:1/priority:3
         $params = $request->param( 'filters', 'string' );
         if ( $params ) {
-            $params = trim( $params, '/' );
-            $params = explode( '/', $params );
+            $params = explode( '/', trim( $params, '/' ) );
+
             foreach ( $params as $f ) {
                 list( $name, $value ) = explode( ':', $f );
-                $filters[$name] = $value;
+                $filters[$name][] = $value === false ? array() : $value;
             }
+            if ( isset( $filters['page'] ) && count( $filters['page'] ) )
+                $filters['page'] = $filters['page'][0];
             if ( count ( $filters ) ) $request->addParams( $filters );
         }
 
         if ( $id ) {
+            // fetching project
             $res = \core\Citrus\data\Model::selectOne( $this->className, $id );
             $this->template->assign( 'res', $res );
             $this->template->assign( 'schema_product', $schema_product );
@@ -80,19 +94,27 @@ class Controller extends mvc\ObjectController {
             $cos = Citrus::getInstance();
 
             if ( $schema_tickets ) {
-                $pager_min = 20;
-                $pager = new \core\Citrus\data\Pager( $schema_tickets->className, $pager_min );
-
                 $origin     = $request->param( 'origin', 'string' );
                 $search     = $request->param( 'search', 'string' );
                 $order      = $request->param( 'order', 'string' );
                 $orderType  = $request->param( 'orderType', 'string' );
-                $status     = $request->param( 'status', 'array[int]' );
-                $type       = $request->param( 'type', 'array[int]' );
-                $priority   = $request->param( 'priority', 'array[int]' );
+                $statuses   = $request->param( 'status', 'array[int]' );
+                $types      = $request->param( 'type', 'array[int]' );
+                $priorities = $request->param( 'priority', 'array[int]' );
 
-                $where = array();
+                if ( $types === false ) $types = Array();
+                if ( $statuses === false ) $statuses = Array();
+                if ( $priorities === false ) $priorities = Array();
 
+                $pager_min = 20;
+                $pager = new \core\Citrus\data\Pager( $schema_tickets->className, $pager_min );
+
+                // only tickets related to the project $res
+                $where = Array(
+                    'project_id = ' . $res->id
+                );
+
+                // search / filter parameters
                 if ( $search !== false ) {
                     if ( $origin == "search-form" ) {
                         $this->template = new Template( '_tickets_list' );
@@ -101,39 +123,44 @@ class Controller extends mvc\ObjectController {
                         $where[] = "$cols LIKE '%$search%'"; 
                     }
                 }
-                if ( $status && count( $status ) ) {
+                if ( $statuses && count( $statuses ) ) {
                     $where_status = Array();
-                    foreach ( $status as $s )
+                    foreach ( $statuses as $s )
                         $where_status[] = '`tkr_ticket`.`status` = ' . $s;
                     $where[] = '(' . implode( ' OR ', $where_status ) . ')';
                 }
 
-                if ( $type && count( $type ) ) {
+                if ( $types && count( $types ) ) {
                     $where_type = Array();
-                    foreach ( $type as $s )
+                    foreach ( $types as $s )
                         $where_type[] = '`tkr_ticket`.`type` = ' . $s;
                     $where[] = '(' . implode( ' OR ', $where_type ) . ')';
                 }
-                if ( $priority && count( $priority ) ) {
+                if ( $priorities && count( $priorities ) ) {
                     $where_prio = Array();
-                    foreach ( $priority as $s )
+                    foreach ( $priorities as $s )
                         $where_prio[] = '`tkr_ticket`.`priority` = ' . $s;
                     $where[] = '(' . implode( ' OR ', $where_prio ) . ')';
                 }
 
+
+                // fetching tickets
                 $list = $pager->getCollection( 
                     $where,
                     $order !== false ? $order : isset( $schema_tickets->orderColumn ) ? $schema_tickets->orderColumn : false, 
                     $orderType !== false ? $orderType : false
                 );
-
-                $this->template->assign( 'search', $search );
-                $this->template->assign( 'order', $order );
-                $this->template->assign( 'orderType', $orderType );
-
-                $this->template->assign( 'schema_tkt', $schema_tickets );
-                $this->template->assign( 'tickets', $list );
-                $this->template->assign( 'pager', $pager );
+                $this->template->assign( Array(
+                    'pager'         => $pager,
+                    'search'        => $search,
+                    'order'         => $order,
+                    'orderType'     => $orderType,
+                    'schema_tkt'    => $schema_tickets,
+                    'tickets'       => $list,
+                    'statuses'      => $statuses,  
+                    'types'         => $types,
+                    'priorities'    => $priorities,
+                ) );
             }
 
         } else Citrus::pageNotFound();
