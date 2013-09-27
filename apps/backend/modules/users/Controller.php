@@ -114,4 +114,62 @@ class Controller extends mvc\ObjectController {
             die( 'Bad method request' );
         }
     }*/
+
+
+    public function do_save( $request ) {
+        $this->layout = !$request->isXHR;
+        $report = Array();
+        $cos = Citrus::getInstance();
+        if ( $request->method != 'POST' ) {
+            if ( $cos->debug ) {
+                throw new Exception( 'Bad method request' );
+            } else {
+                Citrus::pageNotFound();
+            }
+        } else {
+            // vexp($_POST, true);exit;
+            $type = $request->param( 'modelType', 'string' );
+
+            if ( class_exists( $type ) ) {
+                $inst = new $type();
+                if ( isset( $_FILES ) ) {
+                    foreach ( $_FILES as $name => $file ) {
+                        if ( !empty( $file['name'] ) ) {
+                            if ( $inst->$name ) {
+                                unlink( CITRUS_PATH . 'www/upload' . $inst->$name );
+                            }
+                            $upld = new kos_http_Uploader( $file );
+                            $upld->readFile();
+                            $up = $upld->moveFile( CITRUS_PATH . '/www/upload/' );
+                            $inst->args[$name] = $inst->$name = '/www/upload/' . $upld->fileName;
+                        }
+                    }
+                }
+                $inst->password = md5( $password );
+                $inst->hydrateByFilters();
+                $rec = $inst->save();
+                $inst->hydrateManyByFilters();
+                
+                // vexp($inst);exit();
+                if ( $request->isXHR ) {
+                    $this->template = new \core\Citrus\mvc\Template( 'json-response' );
+                    $this->layout = false;
+                    if ( $rec ) {
+                        $this->template->assign('status', "success");
+                        $response['status'] = "success";
+                        $response['return_url'] = $cos->app->getControllerUrl();
+                    } else {
+                        $response['status'] = "error";
+                    }
+                    $cos->response->contentType = "application/json";
+                    $this->template->assign( 'response', $response );
+                } else {
+                    $loc = $cos->app->getControllerUrl();
+                    http\Http::redirect( $loc );
+                }
+            } else throw new sys\Exception( "Unknown class '$type'" );
+        }
+
+        return;
+    }
 }

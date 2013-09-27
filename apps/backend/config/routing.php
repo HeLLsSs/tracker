@@ -42,7 +42,7 @@ return array(
         array(
             'url'    => '/:app/projects/:id/view/:filters', 
             'target' => array( 'controller' => 'projects', 'action' => 'view' ),
-            'conditions' => array( 'filters' => '[a-z0-9:/]+' )
+            'conditions' => array( 'filters' => '[a-z0-9:/,]+' )
         ),
         array(
             'url'    => '/:app/tickets/:id/status/:status', 

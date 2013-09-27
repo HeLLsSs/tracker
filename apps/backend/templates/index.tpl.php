@@ -1,7 +1,6 @@
 <div data-role="page" id="cos-object-list" class="container cos-list">
     <div class="row">
-        <?php if ( isset( $sidebar ) ) include_slice_global( $sidebar ); ?>
-        <div<?php if ( isset( $sidebar ) ) echo ' class="col-lg-10"' ?>>
+        <div>
             <ol class="breadcrumb hidden-xs">
                 <li><a href="<?php echo CITRUS_PROJECT_URL . $cos->app->name ?>/">Accueil</a></li>
                 <li><?php 
@@ -15,7 +14,7 @@
             </h1>
             
             <?php if (count( $list ) == 0 ) { ?>
-                <table class="table" cellspacing="0" cellpadding="0">
+                <table class="table">
                     <thead>
                         <tr class="action">
                             <td>
@@ -67,7 +66,7 @@
                         </div>
                     </div>
                     <div class="table-responsive">
-                        <table class="listing table table-striped table-hover" cellspacing="0" cellpadding="0">
+                        <table class="listing table table-striped table-hover">
                             <thead>
                                 <tr><?php echo implode( '', $resHead ) ?></tr>
                             </thead><?php

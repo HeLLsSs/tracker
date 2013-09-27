@@ -66,7 +66,7 @@ return array(
                 2 => 'En cours',
                 3 => 'En attente client',
                 4 => 'Résolu',
-                5 => 'Annulé',
+                5 => 'Abandonné',
             ),
         ),
         'type' => array(

@@ -42,10 +42,12 @@ foreach ( $tickets as $object ) {
                 $str = ""; 
             }
             if ( $is_lnk ) {
-                $str = '<a href="' . 
+                $cutopen = $chmp == 'title' ? '<span class="cut-txt">' : '';
+                $cutclose = $chmp == 'title' ? '</span>' : '';
+                $str = $cutopen . '<a href="' . 
                         CITRUS_PROJECT_URL . $cos->app->name . 
                         '/tickets/' . $object->id . '/view">' . 
-                        $str . '</a>';
+                        $str . '</a>' . $cutclose;
             }
             if ( $object->isNew() && $chmp == 'datecreated' ) {
                 $str .= ' <span class="label label-info label-xs">new</span>';
@@ -67,6 +69,30 @@ foreach ( $tickets as $object ) {
                 }
                 $str = '<span class="label' . $label_class . '">' . $str . '</span>';
             }
+            if ( $chmp == "status" ) {
+                switch ( $object->status ) {
+                    case \core\tkr\Ticket::STATUS_WAITING:
+                        $label_class = ' label-default';
+                        break;
+                    case \core\tkr\Ticket::STATUS_ASSIGNED:
+                        $label_class = ' label-info';
+                        break;
+                    case \core\tkr\Ticket::STATUS_CLIENT_WAITING:
+                        $label_class = ' label-warning';
+                        break;
+                    case \core\tkr\Ticket::STATUS_FIXED:
+                        $label_class = ' label-success';
+                        break;
+                    case \core\tkr\Ticket::STATUS_ABORTED:
+                        $label_class = ' label-info';
+                        break;
+                    default:
+                        $label_class = '';
+                        break;
+                }
+                $tick = \core\tkr\Ticket::STATUS_FIXED == $object->status ? '<i class="icon-ok"></i> ' : '';
+                $str = '<span class="label' . $label_class . '">' . $tick . $str . '</span>';
+            }
             $resTr[] = '<td>' . $str . '</td>';
 
         } else if ( isset( $schema_tkt->manyProperties[$chmp] ) ) {
@@ -82,8 +108,10 @@ foreach ( $tickets as $object ) {
     $resBody[] = '<tr id="enreg_' . $object->id . '">' . implode('', $resTr ) . '</tr>';
 } 
 ?>
+    
+    <h2>Derniers tickets</h2>
     <div class="table-responsive">
-        <table class="listing table table-striped table-hover" cellspacing="0" cellpadding="0">
+        <table class="listing table table-striped table-hover">
             <thead>
                 <tr><?php echo implode( '', $resHead ) ?></tr>
             </thead>
@@ -92,7 +120,7 @@ foreach ( $tickets as $object ) {
             </tbody>
             <tfoot>
                 <tr class="action">
-                    <td colspan="<?php echo count( $schema_tkt->adminColumns ) + 1 ?>">
+                    <td colspan="<?php echo count( $schema_tkt->adminColumns ) ?>">
                        <?php echo $pager->displayPager() ?>
                     </td>
                 </tr>

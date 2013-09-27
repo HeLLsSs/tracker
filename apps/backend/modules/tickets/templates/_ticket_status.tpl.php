@@ -2,9 +2,15 @@
     <!-- <div class="panel-heading"></div> -->
     <div class="panel-body">
         <div class="row">
-            <div class="col-lg-3">
+            <div class="col-lg-3 col-md-3 col-sm-3">
                 <p>
                     <strong>Créé le <?php echo $res->datecreated->format( 'd/m/Y à H:i' ) ?></strong>
+                    <br>
+                    <?php if ( $cos->user->id == $res->author->id ) { ?>
+                        <a class="btn btn-primary btn-xs" href="<?php
+                            echo $cos->app->getControllerUrl() . $res->id . '/edit';
+                         ?>">Modifier</a>
+                    <?php } ?>
                 </p>
                 <p>
                     <strong>Auteur :</strong> <?php echo $res->author ?>
@@ -75,13 +81,14 @@
                     <?php } ?>
                 </form>
             </div>
-            <div class="col-lg-9">
+            <div class="col-lg-9 col-md-9 col-sm-9">
                 <p><strong>Description :</strong></p>
                 <div id="ticket-description">
                     <div class="well well-sm">
-                        <?php echo $res->description ?>
+                        <?php echo $res->description != '' ? $res->description : 'Pas de description.' ?>
                     </div>
                 </div>
+
             </div>
         </div>
     </div>
@@ -89,10 +96,11 @@
         
         <div class="btn-group" id="status-switch">
             <?php if ( !$res->developer_id ) { ?>
-                <span>Statut : <?php echo $res->getStatus() ?></span> 
+                <p>Statut : <?php echo $res->getStatus() ?></p> 
             <?php } else include_slice( 'status_switch', Array(
                 'res' => $res,
             ) ) ?>
         </div>
+        
     </div>
 </div>

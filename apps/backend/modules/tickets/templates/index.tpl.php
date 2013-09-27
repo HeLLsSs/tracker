@@ -47,7 +47,7 @@
                         </div>
                     </div>
                     <div class="table-responsive">
-                        <table class="listing table table-striped table-hover" cellspacing="0" cellpadding="0">
+                        <table class="listing table table-striped table-hover">
                             <thead>
                                 <tr><?php echo implode( '', $resHead ) ?></tr>
                             </thead><?php

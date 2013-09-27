@@ -1,15 +1,54 @@
 $('#page').on('show', '#tkr-view-project', function() {
     var container = this;
 
+    // responsive toggle for filters
+    $('.filters-check').on('show.bs.collapse', function() {
+        $(this).addClass('visible-xs visible-sm');
+    });
+    $('.filters-check').on('hidden.bs.collapse', function() {
+        $(this).removeClass('visible-xs visible-sm');
+    });
+
+    $('.pagination a', this).on('click', function(e) {
+        e.preventDefault();
+        e.stopImmediatePropagation(e);
+        
+    });
+
     $('.search-filters form', container).on('submit', function(e) {
         e.preventDefault();
         var form = this;
+        var obj = {};
+        var qs = [];
+        $.each($(this).serializeArray(), function (i, item) {
+            var fname = item.name.replace('[]', ''); 
+            if (item.value.length > 0) {
+                if (typeof obj[fname] == 'string') obj[fname] += ',' + item.value;
+                else obj[fname] = item.value;
+                qs.push(fname + ':' + item.value);
+            }
+        });
+     
+        qs = qs.join('/');
+
+        var loc = window.location.pathname;
+        var pattern = 'view';
+        var start = loc.lastIndexOf(pattern);
+        if (qs != '') qs = '/' + qs;
+        var url = loc.substring(0, start + pattern.length) + qs;
+        window.history.pushState({}, '', url);
         $.ajax({
             type: "POST",
             url: form.action,
             data: $(form).serialize() + '&origin=search-form',
             success: function(rsp) {
                 $('#bugs-list').html(rsp);
+                $('.cut-txt').tooltip({
+                    // placement: 'right',
+                    title: function() {
+                        return $(this).text();
+                    }
+                });
             }
         });
     });
@@ -31,11 +70,17 @@ $('#page').on('show', '#tkr-view-project', function() {
 
     });
 
+    $('.cut-txt').tooltip({
+        // placement: 'right',
+        title: function() {
+            return $(this).text();
+        }
+    });
+
     // getBugsList();
 });
 
 $('#page').on('show', '#tkr-view-ticket', function() {
-    console.log($('.status-changer a', this));
     $(this).on('click', '.status-changer a', function (e) {
         var href = $(this).attr('href').replace('#status_', '');
         var text = $(this).text();

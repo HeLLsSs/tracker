@@ -1,10 +1,12 @@
-@highdensity:   ~"only screen and (-webkit-min-device-pixel-ratio: 1.5)",
-                ~"only screen and (min--moz-device-pixel-ratio: 1.5)",
-                ~"only screen and (-o-min-device-pixel-ratio: 3/2)",
-                ~"only screen and (min-device-pixel-ratio: 1.5)";
+@hd:    ~"only screen and (-webkit-min-device-pixel-ratio: 1.5)",
+        ~"only screen and (min--moz-device-pixel-ratio: 1.5)",
+        ~"only screen and (-o-min-device-pixel-ratio: 3/2)",
+        ~"only screen and (min-device-pixel-ratio: 1.5)";
 
-@mobile:        ~"only screen and (max-width: 320px)";
-@mobile-lanscape:        ~"only screen and (max-width: 480px)";
+@xs: ~"only screen and (max-width: 767px)";
+@sm: ~"only screen and (min-width: 768px) and (max-width: 991px)";
+@md: ~"only screen and (min-width: 992px) and (max-width: 1199px)"; 
+@lg: ~"only screen and (min-width: 1200px)";
 
 .listing-bugs {
     margin-top: 20px;
@@ -39,13 +41,24 @@
 
 #ticket-description {
     font-size: 12px;
+
+    .well {
+        min-height: 200px;
+    }
 }
 
 #bugs-list .listing {
     font-size: 13px;
 }
-
-@media @mobile, @mobile-lanscape {
+@media @lg, @md {
+    .filters-check {
+        height: auto !important;
+    }
+}
+@media @xs {
+    .btn.btn-wide {
+        width: 100%;
+    }
     #bugs-list .listing {
         font-size: 12px;
     }
@@ -72,4 +85,12 @@
     #status-switch, #status-switch button, ul.status-changer {
         width: 100%
     }
+}
+
+span.cut-txt {
+    max-width: 200px;
+    overflow-x: hidden;
+    display: inline-block;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
