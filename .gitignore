@@ -18,3 +18,5 @@ log/error-201309.log
 log/error.log
 
 log/tracker.caramia.dev-201309.log
+
+config/config.inc.php
