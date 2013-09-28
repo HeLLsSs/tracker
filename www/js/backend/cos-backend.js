@@ -21,6 +21,7 @@ CosBackend.prototype = {
         var self = this;
 
         $(window).on('popstate', function() {
+            console.log(window.location.pathname);
             self.loadPage(window.location.pathname);
         });
         

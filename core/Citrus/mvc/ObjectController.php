@@ -111,13 +111,13 @@ class ObjectController extends Controller {
         $cos = Citrus::getInstance();
         if ( $request->method != 'POST' ) {
             if ( $cos->debug ) {
-                throw new Exception( 'Bad method request' );
+                throw new sys\Exception( 'Bad method request' );
             } else {
                 Citrus::pageNotFound();
             }
         } else {
             // vexp($_POST, true);exit;
-            $type = $request->param( 'modelType', 'string' );
+            $type = $this->className;
 
             if ( class_exists( $type ) ) {
                 $inst = new $type();

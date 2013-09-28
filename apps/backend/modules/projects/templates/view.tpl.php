@@ -1,4 +1,4 @@
-<div data-role="page" id="tkr-view-project" class="container">
+<div data-role="page" id="tkr-view-project">
     <div>
         <ol class="breadcrumb hidden-xs">
             <li><a href="<?php echo CITRUS_PROJECT_URL . $cos->app->name ?>/">Accueil</a></li>
@@ -32,7 +32,7 @@
         </div>
         <div id="projet-panel" class="row">
             <div class="col-lg-3 col-md-3 col-xs-12">
-                <?php include_slice( 'bugs_filters', array( 
+                <?php include_slice( 'tickets_filters', array( 
                     'res'        => $res,
                     'statuses'   => $statuses,
                     'types'      => $types,

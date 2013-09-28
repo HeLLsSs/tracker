@@ -162,4 +162,21 @@ class Controller extends mvc\ObjectController {
             Citrus\Citrus::pageNotFound();
         } else parent::do_index( $request );
     }
+
+    public function do_comments( $request ) {
+        $request->isXHR = true;
+        if ( $request->isXHR ) {
+            $this->template = new mvc\Template( '_comments' );
+            $this->layout = false;
+            $id = $request->param( 'id', 'int' );
+            $comments = Array();
+            if ( $id ) {
+                $comments = call_user_func_array( 
+                    Array( $this->className, 'getTicketsComments' ), 
+                    Array( $id )
+                );
+            }
+            $this->template->assign( 'comments', $comments );
+        } else Citrus\Citrus::pageNotFound();
+    }
 }

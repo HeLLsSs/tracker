@@ -1,6 +1,8 @@
 <?php
 
 namespace core\tkr;
+use \core\Citrus\data;
+use \core\Citrus\Date;
 
 class Ticket extends \core\Citrus\data\Model {
     public $id;
@@ -18,6 +20,11 @@ class Ticket extends \core\Citrus\data\Model {
     public $fix_id;
     public $fix;
 
+    private $datecreated;
+    private $datemodified;
+
+    private $comments = Array();
+
     const STATUS_WAITING        = 1;
     const STATUS_ASSIGNED       = 2;
     const STATUS_CLIENT_WAITING = 3;
@@ -33,6 +40,20 @@ class Ticket extends \core\Citrus\data\Model {
     const PRIORITY_URGENT       = 2;
     const PRIORITY_BLOCKING     = 3;
 
+    public function __get( $name ) {
+        switch ( $name ) {
+            case 'comments':
+                return $this->getComments();
+                break;
+            case 'datecreated':
+                return Date::parse( $this->$name );
+            case 'datemodified':
+                return Date::parse( $this->$name );
+            default:
+                return $this->$name;
+                break;
+        }
+    }
 
     public function getStatus() {
         switch ( intval( $this->status ) ) {
@@ -94,8 +115,26 @@ class Ticket extends \core\Citrus\data\Model {
         }
     }
 
+    public function getComments() {
+        if ( !count( $this->comments ) && $this->id ) {
+            $this->comments = self::getTicketsComments( $this->id );
+        }
+        return $this->comments;
+    }
+
+    static public function getTicketsComments( $id ) {
+        $c = new data\ModelCollection( '\core\tkr\Comment' );
+        $c->query->addWhere( 'tkr_comment.ticket_id = ' . $id );
+        $c->query->addWhere( 'tkr_comment.comment_id IS NULL ' );
+            $c->query->addOrder( 'tkr_comment.datecreated ASC' );
+        $c->fetch();
+        return $c->items;
+    }
+
     public function isNew() {
         $delay = 60 * 60 * 24 * 2; // 2 days
+        if ( get_class( $this->datecreated ) != '\core\Citrus\Date' ) 
+            $this->datecreated = Date::parse( $this->datecreated );
         return date( 'U' ) - $this->datecreated->format( 'U' ) < ( $delay );
     }
 

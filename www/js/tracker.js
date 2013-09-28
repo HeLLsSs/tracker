@@ -63,9 +63,7 @@ $('#page').on('show', '#tkr-view-project', function() {
         $(this).parent().addClass("active");
         var href = $(this).attr('href');
         var status = href.substring(href.lastIndexOf('_') + 1, href.length);
-        if (status != '') {
-            getBugsList(status);
-        }
+        if (status != '') getBugsList(status);
         return false;
 
     });
@@ -81,6 +79,7 @@ $('#page').on('show', '#tkr-view-project', function() {
 });
 
 $('#page').on('show', '#tkr-view-ticket', function() {
+    var mePage = this;
     $(this).on('click', '.status-changer a', function (e) {
         var href = $(this).attr('href').replace('#status_', '');
         var text = $(this).text();
@@ -132,7 +131,7 @@ $('#page').on('show', '#tkr-view-ticket', function() {
             url: href,
             success: function(rsp) {
                 if (rsp.status == 'success') {
-                    $('#dev-btn span:eq(0)').text(text);
+                    $('#dev-btn span:eq(0)').text('Attribué à : ' + text);
                     $.ajax({
                         url: 'status-switch',
                         success: function(rsp) {
@@ -144,7 +143,25 @@ $('#page').on('show', '#tkr-view-ticket', function() {
         });
         e.preventDefault();
     });
-});
+    $('.comment-author span').tooltip({html: true});
+    $('form#add-comment', this).on('submit', function(e) {
+        e.preventDefault();
+        var form = this;
+        $.ajax({
+            url: form.action,
+            type: form.method,
+            data: $(form).serialize(),
+            success: function(rsp) {
+                console.log(rsp);
+                // if (rsp.status == 'success') {
+                    form.reset();
+                    $('#comments-list', mePage).html(rsp);
+                    $('.comment-author span').tooltip({html: true});
+                // }
+            }
+        });
+    });
+}); // end view ticket
 
 function getBugsList(status) {
     var url = "view";

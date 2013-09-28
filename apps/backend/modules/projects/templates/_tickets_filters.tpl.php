@@ -1,10 +1,11 @@
-<div class="panel panel-default search-filters">
-    <div class="visible-sm visible-xs panel-heading">
-    <button type="button" class="btn btn-default btn-wide" data-toggle="collapse" data-target=".filters-check">
-        <i class="icon-filter"></i>
-        Filtres
-    </button>
+<div class="search-filters">
+    <div class="visible-sm visible-xs">
+        <button type="button" class="btn btn-default btn-wide" data-toggle="collapse" data-target=".filters-check">
+            <i class="icon-filter"></i>
+            Filtres
+        </button>
     </div>
+
     <form class=" panel-body form-inline filters-check visible-lg visible-md" method="post" action="<?php 
         echo CITRUS_PROJECT_URL . $cos->app->name ?>/projects/<?php echo $res->id ?>/view">
         <div class="row">

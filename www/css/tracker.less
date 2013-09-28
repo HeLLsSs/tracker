@@ -39,24 +39,31 @@
     font-weight: bold;
 }
 
-#ticket-description {
-    font-size: 12px;
-
-    .well {
-        min-height: 200px;
-    }
-}
 
 #bugs-list .listing {
     font-size: 13px;
 }
 @media @lg, @md {
+    #ticket-description {
+        font-size: 12px;
+
+        .well {
+            // min-height: 200px;
+        }
+    }
     .filters-check {
         height: auto !important;
     }
+    .comment-author i {
+        font-size: 25px;
+    }
 }
+
 @media @xs {
-    .btn.btn-wide {
+    .filters-check .form-group {
+        margin: 0;
+    }
+    .btn.btn-wide, .btn-group {
         width: 100%;
     }
     #bugs-list .listing {
@@ -93,4 +100,68 @@ span.cut-txt {
     display: inline-block;
     text-overflow: ellipsis;
     white-space: nowrap;
+}
+
+textarea.no-resize {
+    resize: none;
+}
+
+textarea[name="content"] {
+    height: 100px;
+}
+
+#comments-list {
+    border-top: 1px solid #eee;
+    border-bottom: 1px solid #eee;
+    padding: 0 0 20px 0;
+    margin: 0 0 20px 0;
+    .ticket-comment {
+        h5, p { margin: 0; }
+        small { font-size: 70%; }
+        margin-bottom: 10px;
+        font-size: 90%;
+        .comment-author {
+            i { font-size: 30px; }
+            width: 50px;
+            text-align: center;
+            color: rgba(0, 0, 0, 0.4);
+            position: relative;
+            &:before {
+                border-style: solid;
+                border-color: transparent;
+                border-right-color: rgba(0, 0, 0, 0.1);
+                border-width: 5px 5px 5px 0;
+                content: " ";
+                height: 0;
+                position: absolute;
+                right: 0;
+                top: 13px;
+                width: 0;
+
+            }
+        }
+        .comment-content {
+            width: calc(~"100% - 50px");
+            background-color: rgba(0, 0, 0, 0.1);
+            padding: 5px 10px;
+            min-height: 50px;
+            border-radius: 5px;
+            p { padding: 5px 0; }
+        }
+        &:nth-child(2n+1) {
+            .comment-content {
+                background-color: rgba(0, 0, 0, 0.2);
+            }
+            .comment-author {
+                &:before {
+                    border-left-color: rgba(0, 0, 0, 0.2);
+                    border-width: 5px 0 5px 5px;
+                    margin-top: -4px;
+                    left: 0;
+                    top: 17px;
+                    right: auto;
+                }
+            }
+        }
+    }
 }

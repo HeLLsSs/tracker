@@ -56,18 +56,18 @@ class Form {
         if ( $elt instanceof InputHidden ) {
             $str = (string)$elt;
         } elseif ( $elt instanceof RichText ) {
-            $str = "<div class=\"form-group clearfix $classes\">\n";
-            if ( $elt->label ) $str .= "<label class=\"col-lg-2 control-label\" for=\"$elt->id\">" . tr( $elt->label ) . ":</label>\n";
+            $str = "<div class=\"form-group row clearfix $classes\">\n";
+            if ( $elt->label ) $str .= "<label class=\"col-lg-2 col-xs-12 control-label\" for=\"$elt->id\">" . tr( $elt->label ) . ":</label>\n";
             $str .= '<div class="col-lg-10">' . "\n\t";
             $str .= (string)$elt;
             $str .= "\n</div>\n";
             $str .= "\n</div>\n";
         } else {
-            $str = "<div class=\"form-group clearfix $classes\">\n";
+            $str = "<div class=\"form-group row clearfix $classes\">\n";
             if ( $elt->label ) {
-                $str .= "<label class=\"col-lg-2 control-label\" for=\"$elt->id\">" . tr( $elt->label ) . ":</label>\n";
+                $str .= "<label class=\"col-lg-2 col-xs-12 control-label\" for=\"$elt->id\">" . tr( $elt->label ) . ":</label>\n";
             }
-            $str .= '<div class="col-lg-10">' . "\n\t";
+            $str .= '<div class="col-lg-10 col-xs-12">' . "\n\t";
             $str .= (string)$elt;
             $str .= "\n</div>\n";
             $str .= "\n</div>\n";

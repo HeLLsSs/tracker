@@ -19,7 +19,7 @@
             $btn_class = '';
             break;
     }
- ?><button id="status-btn" class="btn <?php echo $btn_class ?> dropdown-toggle" data-toggle="dropdown">
+ ?><button id="status-btn" class="btn btn-sm <?php echo $btn_class ?> dropdown-toggle" data-toggle="dropdown">
     <span>Statut : <?php echo $res->getStatus() ?></span> 
     <span class="caret"></span>
 </button>

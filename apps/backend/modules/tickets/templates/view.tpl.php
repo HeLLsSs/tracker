@@ -1,4 +1,4 @@
-<div data-role="page" id="tkr-view-ticket" class="container">
+<div data-role="page" id="tkr-view-ticket">
     <div>
         <ol class="breadcrumb hidden-xs">
             <li><a href="<?php echo CITRUS_PROJECT_URL . $cos->app->name ?>/">Accueil</a></li>
@@ -9,7 +9,7 @@
                 echo CITRUS_PROJECT_URL . $cos->app->name . '/projects/' . $res->project->id . '/view'
             ?>"><?php echo $res->project->name ?></a></li>
             <li>
-                <?php echo $res->title ?>
+                Voir le ticket
             </li>
         </ol>
         <div class="back-btn visible-xs">
@@ -22,7 +22,11 @@
         <div id="projet-panel">
             <h1>
                 <?php echo $res->title ?>
+                <small>
+                    Créé le <?php echo $res->datecreated->format( 'd/m/Y à H:i' ) ?>
+                </small>
             </h1>
+            
              <?php include_slice( 'ticket_status', array( 
                 'res' => $res,
                 'devs' => $devs,
