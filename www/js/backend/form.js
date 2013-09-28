@@ -170,7 +170,6 @@ var selectMany_Update = function ( select, input, recap ) {
     	selectMany_Exec(cont);
     	checkMany_Exec( cont );
     	
-        // $( 'textarea.wysiwyg', item ).ckeditor();
         tinymce.editors = [];
     	$( 'textarea.wysiwyg', item ).tinymce({
             statusbar: false,
