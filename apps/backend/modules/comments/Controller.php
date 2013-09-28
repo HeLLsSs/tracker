@@ -27,7 +27,7 @@ class Controller extends mvc\ObjectController {
                 $inst = new $type();
 
                 $inst->hydrateByFilters();
-                $inst->content = nl2br( $inst->content );
+                $inst->content = nl2br( $inst->content, false );
                 $rec = $inst->save();
                 
                 $loc = CITRUS_PROJECT_URL . $cos->app->name . '/tickets/' . $inst->ticket_id . '/comments';
