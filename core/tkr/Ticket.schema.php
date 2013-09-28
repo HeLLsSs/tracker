@@ -49,7 +49,7 @@ return array(
         'developer_id' => array(   
             'type'              => 'int',
             'null'              => false,
-            'formLabel'         => 'Assigné à',
+            'formLabel'         => 'Attribué à',
             // 'inputType'         => 'SelectOne',
             'modelType'         => '\core\tkr\User',
             'foreignTable'      => 'tkr_user',
