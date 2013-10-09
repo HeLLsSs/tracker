@@ -13,47 +13,58 @@ class Controller extends mvc\ObjectController {
     public function do_edit( $request ) {
         $cos = Citrus\Citrus::getInstance();
         $schema = data\Model::getSchema( $this->className );
-        $this->layout = !$request->isXHR;
+        $this->view->layout = !$request->isXHR;
         $id = $request->param( 'id', 'int' );
         if ( $id ) {
             $res = data\Model::selectOne( $this->className, $id );
+            $project_ids = $cos->user->getProjectsIds();
+            if ( !in_array( $res->project_id, $project_ids ) && !$cos->user->isadmin ) {
+                Citrus\Citrus::pageNotFound();
+                return false;
+            }
         } else {
             $res = new $this->className();
             $res->author_id = $cos->user->id;
         }
         $form = Form::generateForm( $res );
-        $this->template->assign( 'res', $res );
-        $this->template->assign( 'form', $form );
-        $this->template->assign( 'schema', $schema );
-        $this->template->assign( 'layout', $this->layout );
+        $this->view->assign( 'res', $res );
+        $this->view->assign( 'form', $form );
+        $this->view->assign( 'schema', $schema );
+        $this->view->assign( 'layout', $this->view->layout );
     }
 
     public function do_view( $request ) {
         $cos = Citrus\Citrus::getInstance();
         $schema = data\Model::getSchema( $this->className );
-        $this->layout = !$request->isXHR;
+        $this->view->layout = !$request->isXHR;
         $id = $request->param( 'id', 'int' );
         if ( $id ) {
             $res = data\Model::selectOne( $this->className, $id );
 
             if ( $res ) {
-                $this->template->assign( 'res', $res );
-                $this->template->assign( 'schema', $schema );
-                $this->template->assign( 'layout', $this->layout );
+                $project_ids = $cos->user->getProjectsIds();
+                if ( !in_array( $res->project_id, $project_ids ) && !$cos->user->isadmin ) {
+                    Citrus\Citrus::pageNotFound();
+                    return false;
+                }
+                $this->view->assign( 'res', $res );
+                $this->view->assign( 'schema', $schema );
+                $this->view->assign( 'layout', $this->view->layout );
 
                 $devColl = new data\ModelCollection( '\core\tkr\User' );
                 $devColl->query->addWhere( 'isadmin = 1' );
                 // $devColl->query->addWhere( 'id <> ' . $cos->user->id );
                 $devColl->fetch();
-                $this->template->assign( 'devs', $devColl->items );
+                $this->view->assign( 'devs', $devColl->items );
             } else Citrus\Citrus::pageNotFound();
         }
     }
 
     public function do_save( $request ) {
-        $this->layout = !$request->isXHR;
+        $this->view->layout = !$request->isXHR;
         $report = Array();
         $cos = Citrus\Citrus::getInstance();
+
         if ( $request->method != 'POST' ) {
             if ( $cos->debug ) {
                 throw new Exception( 'Bad method request' );
@@ -62,6 +73,12 @@ class Controller extends mvc\ObjectController {
             }
         } else {
             #vexp($_POST);
+            $id = $request->param( 'id', 'int' );
+            $project_ids = $cos->user->getProjectsIds();
+            if ( !in_array( $id, $project_ids ) && !$cos->user->isadmin ) {
+                Citrus::pageNotFound();
+                return false;
+            }
             $type = $request->param( 'modelType', 'string' );
 
             if ( class_exists( $type ) ) {
@@ -69,24 +86,26 @@ class Controller extends mvc\ObjectController {
                 
                 $inst->status = \core\tkr\Ticket::STATUS_WAITING;
                 $inst->hydrateByFilters();
+                $is_new = $inst->id;
                 $rec = $inst->save();
                 $inst->hydrateManyByFilters();
                 
                 if ( $request->isXHR ) {
-                    $this->template = new mvc\Template( 'json-response' );
-                    $this->layout = false;
+                    $this->view = new mvc\View( 'json-response' );
+                    $this->view->layout = false;
                     $response = Array();
                     if ( $rec ) {
-                        $this->template->assign('status', "success");
+                        $this->view->assign('status', "success");
                         $response['status'] = "success";
-                        $response['return_url'] = CITRUS_PROJECT_URL . $cos->app->name . '/projects/' . $inst->project_id . '/view';
+                        $response['return_url'] = CITRUS_PROJECT_URL . $cos->app->name . '/tickets/' . $inst->id . '/view';
+                        $response['message'] = "Le ticket a été enregistré.";
                     } else {
                         $response['status'] = "error";
                     }
                     $cos->response->contentType = "application/json";
-                    $this->template->assign( 'response', $response );
+                    $this->view->assign( 'response', $response );
                 } else {
-                    $loc = CITRUS_PROJECT_URL . $cos->app->name . '/projects/' . $inst->project_id . '/view';
+                    $loc = CITRUS_PROJECT_URL . $cos->app->name . '/tickets/' . $inst->id . '/view';
                     http\Http::redirect( $loc );
                 }
             } else throw new sys\Exception( "Unknown class '$type'" );
@@ -97,61 +116,71 @@ class Controller extends mvc\ObjectController {
 
     public function do_status( $request ) {
         $cos = Citrus\Citrus::getInstance();
-        $this->layout = !$request->isXHR;
+        $this->view->layout = !$request->isXHR;
         $id = $request->param( 'id', 'int' );
         $status = $request->param( 'status', 'int' );
         if ( $id && $status ) {
             $res = data\Model::selectOne( $this->className, $id );
+            $project_ids = $cos->user->getProjectsIds();
+            if ( !in_array( $res->project_id, $project_ids ) && !$cos->user->isadmin ) {
+                Citrus\Citrus::pageNotFound();
+                return false;
+            }
             $res->status = $status;
             $rec = $res->save();
             $response = Array();
             if ( $request->isXHR ) {
                 if ( $rec ) {
-                    $this->template = new mvc\Template( 'json-response' );
+                    $this->view = new mvc\View( 'json-response' );
                     $response['status'] = "success";
                     $response['data']['status'] = (int) $res->status;
                 } else {
                     $response['status'] = "error";
                 }
                 $cos->response->contentType = "application/json";
-                $this->template->assign( 'response', $response );
+                $this->view->assign( 'response', $response );
             } else http\Http::redirect( $request->referer );
         } else Citrus\Citrus::pageNotFound();
     }
 
     public function do_dev( $request ) {
         $cos = Citrus\Citrus::getInstance();
-        $this->layout = !$request->isXHR;
+        $this->view->layout = !$request->isXHR;
         $id = $request->param( 'id', 'int' );
         $dev_id = $request->param( 'dev_id', 'int' );
         if ( $id && $dev_id ) {
             $res = data\Model::selectOne( $this->className, $id );
+            $project_ids = $cos->user->getProjectsIds();
+            if ( !in_array( $res->project_id, $project_ids ) && !$cos->user->isadmin ) {
+                Citrus\Citrus::pageNotFound();
+                return false;
+            }
             $res->developer_id = $dev_id;
             $rec = $res->save();
             $response = Array();
             if ( $request->isXHR ) {
                 if ( $rec ) {
-                    $this->template = new mvc\Template( 'json-response' );
+                    $this->view = new mvc\View( 'json-response' );
                     $response['status'] = "success";
                     $response['data']['status'] = (int) $res->status;
                 } else {
                     $response['status'] = "error";
                 }
                 $cos->response->contentType = "application/json";
-                $this->template->assign( 'response', $response );
+                $this->view->assign( 'response', $response );
             } else http\Http::redirect( $request->referer );
         } else Citrus\Citrus::pageNotFound();
     }
 
     public function do__status_switch( $request ) {
         $cos = Citrus\Citrus::getInstance();
-        $this->layout = false;
+        $this->view->layout = false;
         $id = $request->param( 'id', 'int' );
         if ( $id ) {
             $res = data\Model::selectOne( $this->className, $id );
             // if ( $res->status == \core\tkr\Ticket::STATUS_WAITING ) 
                 // $res->status = \core\tkr\Ticket::STATUS_ASSIGNED;
-            $this->template->assign( 'res', $res );
+            $this->view->assign( 'res', $res );
             
         } else Citrus\Citrus::pageNotFound();
     }
@@ -166,8 +195,8 @@ class Controller extends mvc\ObjectController {
     public function do_comments( $request ) {
         $request->isXHR = true;
         if ( $request->isXHR ) {
-            $this->template = new mvc\Template( '_comments' );
-            $this->layout = false;
+            $this->view = new mvc\View( '_comments' );
+            $this->view->layout = false;
             $id = $request->param( 'id', 'int' );
             $comments = Array();
             if ( $id ) {
@@ -176,7 +205,7 @@ class Controller extends mvc\ObjectController {
                     Array( $id )
                 );
             }
-            $this->template->assign( 'comments', $comments );
+            $this->view->assign( 'comments', $comments );
         } else Citrus\Citrus::pageNotFound();
     }
 }

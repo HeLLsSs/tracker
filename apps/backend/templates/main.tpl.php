@@ -15,7 +15,7 @@
 
     ?>
     <div id="page" class="container">
-        <?php echo $this->displayTemplate(); ?>
+        <?php echo $this->getSubview(); ?>
         <div class="merci-ie"></div>
     </div>
     <div id="citrus-signature">

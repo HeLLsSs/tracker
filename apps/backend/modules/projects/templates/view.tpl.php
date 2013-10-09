@@ -30,6 +30,37 @@
             </div>
             <div class="clearfix"></div>
         </div>
+        <?php if ( $res->description && $has_any_url ) { ?>
+            <div class="row">
+                <div class="<?php echo $has_any_url ? 'col-lg-9' : 'col-lg-12' ?>">
+                    <strong>Description</strong>
+                    <div class="well">
+                        <?php echo $res->description != '' ? $res->description : "Pas de description."  ?>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <?php if ( $res->url_dev != '' ) { ?>
+                        <a class="btn btn-link" href="<?php echo $res->url_dev ?>">
+                            <i class="icon-external-link"></i>
+                            Site de développement
+                        </a>
+                    <?php } ?>
+                    <?php if ( $res->url_preprod != '' ) { ?>
+                        <a class="btn btn-link" href="<?php echo $res->url_preprod ?>">
+                            <i class="icon-external-link"></i>
+                            Site de pré-production
+                        </a>
+                    <?php } ?>
+                    <?php if ( $res->url_prod != '' ) { ?>
+                        <a class="btn btn-link" href="<?php echo $res->url_prod ?>">
+                            <i class="icon-external-link"></i>
+                            Site de production
+                        </a>
+                    <?php } ?>
+                </div>
+            </div>
+            <hr>
+        <?php } ?>
         <div id="projet-panel" class="row">
             <div class="col-lg-3 col-md-3 col-xs-12">
                 <?php include_slice( 'tickets_filters', array( 

@@ -11,7 +11,7 @@ class Controller extends mvc\ObjectController {
     public $className = '\core\tkr\Comment';
 
     public function do_save( $request ) {
-        $this->layout = !$request->isXHR;
+        $this->view->layout = !$request->isXHR;
         $report = Array();
         $cos = Citrus::getInstance();
         if ( $request->method != 'POST' ) {

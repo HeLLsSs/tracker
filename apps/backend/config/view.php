@@ -1,6 +1,6 @@
 <?php
 
-$this->view->setStyleSheets( array(
+$this->setStyleSheets( array(
     'font-awesome.min.css',
     'backend/backend.css',
 	'backend/forms.css',
@@ -9,12 +9,12 @@ $this->view->setStyleSheets( array(
     'tracker.less',
 ) );
 
-$this->view->addStyleSheet( 
+$this->addStyleSheet( 
     CITRUS_PROJECT_URL . 
     'js/jQuery/jquery-ui-1.8.6.custom/css/custom-theme/jquery-ui-1.8.6.custom.css' 
 );
 
-$this->view->setJavascriptFiles( array(
+$this->setJavascriptFiles( array(
 	'jQuery/jquery-1.7.1.min.js',
 	'jQuery/jquery-ui-1.8.6.custom/js/jquery-ui-1.8.6.custom.min.js',
 	'jQuery/jquery.ui.datepicker-fr.js',
@@ -36,6 +36,6 @@ $this->view->setJavascriptFiles( array(
 
 if ( !isset( $cos ) ) $cos = \core\Citrus\Citrus::getInstance();
 if ( $cos->debug ) {
-    $this->view->addStyleSheet( '/citrus-debug/css/citrus.min.css' );
-    $this->view->addJavascript( '/citrus-debug/js/debug.js' );
+    $this->addStyleSheet( '/citrus-debug/css/citrus.min.css' );
+    $this->addJavascript( '/citrus-debug/js/debug.js' );
 }
