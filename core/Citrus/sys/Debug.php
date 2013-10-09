@@ -130,14 +130,11 @@ class Debug {
         $logger = new Logger( 'error' );
         $logger->logEvent( $msg . ' ' . $file . ' on line ' . $line );
         $logger->writeLog();
-        // $err = new Error( $number, $msg, $file, $line, $context, $stack );
-        if ( $cos->debug ) {
-            // $msg = Error::renderHtml( $err );
-            $errorTpl = self::renderErrorHtml( $number, $msg, $file, $line, $context );
-            
-        } else {
+
+        $cos->debug ?
+            $errorTpl = self::renderErrorHtml( $number, $msg, $file, $line, $context ) :
             $errorTpl = file_get_contents( CITRUS_PATH . '/core/Citrus/sys/templates/error_lite.tpl' );
-        }
+        
         die( $errorTpl );
     }
     

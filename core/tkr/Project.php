@@ -16,9 +16,9 @@ class Project extends \core\Citrus\data\Model {
     private $users;
     // private $devs;
 
-    const PROJECT_STATUS_WAITING    = 0;
-    const PROJECT_STATUS_RUNNING    = 1;
-    const PROJECT_STATUS_FINISHED   = 2;
+    const PROJECT_STATUS_WAITING    = 1;
+    const PROJECT_STATUS_RUNNING    = 2;
+    const PROJECT_STATUS_FINISHED   = 3;
 
     public function __toString() {
         return $this->name;

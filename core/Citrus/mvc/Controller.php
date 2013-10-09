@@ -53,29 +53,9 @@ class Controller {
     public $request;
     
     /**
-     * @var \core\Citrus\mvc\Template
+     * @var \core\Citrus\mvc\View
      */
-    public $template;
-    
-    /**
-     * @var string
-     */
-    public $pageTitle;
-    
-    /**
-     * @var boolean
-     */
-    public $layout = true;
-    
-    /**
-     * @var string
-     */
-    public $metadesc;
-    
-    /**
-     * @var string
-     */
-    public $metakey;
+    public $view;
     
     /**
      * @var string
@@ -105,8 +85,7 @@ class Controller {
      */ 
     public function __construct( $action, $path = '' ) {    
         $this->action = $action;
-        // $this->request = new http\Request();
-        $this->template = new Template( $action );
+        $this->view = new View( $action );
         $this->path = $path;
     }
     
@@ -121,28 +100,23 @@ class Controller {
      */
     public function executeAction( $request, $force_external_post = false ) {
         $cos = Citrus::getInstance();
-        if ( $cos->request->method == 'POST' && !$cos->request->refererIsInternal() && !$force_external_post ) {
+        if ( $request->method == 'POST' && !$request->refererIsInternal() && !$force_external_post ) {
             $this->do_PageNotFound();
             return true;
         }
 
         $action = "do_$this->action";
-        // $response = new http\Response();
         try {
-            if ( $cos->logger ) {
+            if ( $cos->logger )
                 $cos->logger->logEvent( 'Launching action ' . $action . ' on module ' . $this->name );
-            }
-            if ( $cos->debug ) {
+            if ( $cos->debug )
                 $cos->debug->startNewTimer( "action " . $action );
-            }
-            
+
+            $this->view->layout = !$request->isXHR;
             $this->$action( $request );
-            // $cos->response->code = '200';
-            // $response->sendHeaders();
-            
-            if ( $cos->debug ) {
-                $cos->debug->stopLastTimer();
-            }
+
+            if ( $cos->debug ) $cos->debug->stopLastTimer();
+
             return true;
         } catch ( \core\Citrus\sys\Exception $e ) {
             $this->do_Exception( $e );
@@ -225,23 +199,11 @@ class Controller {
      * @return  string  The content of the template.
      */
     public function displayTemplate() {
-        return $this->template->display( $this->path );
+        return $this->view->display();
     }
     
-    /**
-     * Loads the template of another action than the action given.
-     * 
-     * @param  string  $action  the action which we want to load the template
-     */
-    public function loadActionTemplate( $action ) {
-        $tplFile = $this->path . '/templates/' . $action . '.tpl.php';
-        if ( file_exists( $tplFile ) ) {
-            $this->app->view->template = $tplFile;
-            $this->template->name = $action;
-        }
-    }
-
     public function getPath() {
         return dirname( __FILE__ );
     }
+
 }

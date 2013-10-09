@@ -28,6 +28,7 @@
 
 namespace core\Citrus\mvc;
 use core\Citrus\http\Request;
+use core\Citrus\Citrus;
 use core\Citrus\sys;
 
 class App {
@@ -51,17 +52,7 @@ class App {
      * @var \core\Citrus\mvc\Controller
      */
     public $controller;
-    
-    /**
-     * @var \core\Citrus\View
-     */
-    public $view;
-    
-    /**
-     * @var string
-     */
-    public $mainLayout;
-    
+        
     /**
      * @var string
      */
@@ -93,8 +84,6 @@ class App {
         if ( is_dir( CITRUS_APPS_PATH . $name ) ) {
             $this->name = $name;
             $this->path = CITRUS_APPS_PATH . $name;
-            $this->mainLayout = $this->path . '/templates/main.tpl.php';
-            $this->view = new View( $this );
             $this->readConfig();
         } else {
             throw new sys\Exception( "Unkown app $name" );
@@ -112,9 +101,6 @@ class App {
     public function readConfig() {
         if ( file_exists( $this->path . '/config/config.php' ) ) {
             require_once $this->path . '/config/config.php';
-        }
-        if ( file_exists( $this->path . '/config/view.php' ) ) { 
-            require_once $this->path . '/config/view.php';
         }
     }
     
@@ -161,7 +147,7 @@ class App {
                 $r = new \ReflectionClass( $ctrlPath ); 
                 $inst = $r->newInstanceArgs( $args ? $args : array() );
 
-                $this->controller = \core\Citrus\Citrus::apply( $inst, Array( 
+                $this->controller = Citrus::apply( $inst, Array( 
                     'name' => $ctrlName, 
                 ) );
                 if ( $this->controller->is_protected == null ) {
@@ -181,7 +167,7 @@ class App {
      * Executes the controller method that the action determines.
      */
     public function executeCtrlAction( $force_external_post = false ) {
-        $cos = \core\Citrus\Citrus::getInstance();
+        $cos = Citrus::getInstance();
         if ( !$this->isAccessAllowed() ) {
             $this->onActionProtected();
         } elseif ( $this->controller->actionExists() ) {
@@ -191,13 +177,8 @@ class App {
     }
 
     public function output() {
-        $cos = \core\Citrus\Citrus::getInstance();
-        $cos->response->sendHeaders();
-        if ( $this->controller->layout === true )
-            $this->view->displayLayout();
-        else {
-            echo $this->controller->displayTemplate();
-        }
+        Citrus::getInstance()->response->sendHeaders();
+        echo $this->controller->view->display();
     }
 
     public function isAccessAllowed() {
@@ -245,73 +226,6 @@ class App {
         }
     }
 
-    
-    /**
-     * Creates a configuration file from the template.
-     *
-     * @return boolean whether the file could be created or not.
-     */
-    public function generateConfigFile() {
-        if ( is_dir( $this->path ) ) {
-            $templateFile = CITRUS_PATH . '/core/Citrus/mvc/templates/config.tpl';
-            $tpl =  fopen( $templateFile, 'r' );
-            $content = fread( $tpl, filesize( $templateFile ) );
-            fclose( $tpl );
-            
-            $write = false;
-            if ( $content ) {
-                $file = fopen( $this->path . '/config/config.php', 'w' );
-                $write = fwrite( $file, $content );
-                fclose( $file );
-            }
-            return $write;
-        } else return false;
-    }
-    
-    /**
-     * Creates a 'view' file from the template.
-     *
-     * @return boolean whether the file could be created or not.
-     */
-    public function generateViewFile() {
-        if ( is_dir( $this->path ) ) {
-            $templateFile = CITRUS_PATH . '/core/Citrus/mvc/templates/view.tpl';
-            $tpl =  fopen( $templateFile, 'r' );
-            $content = fread( $tpl, filesize( $templateFile ) );
-            fclose( $tpl );
-            
-            $write = false;
-            if ( $content ) {
-                $file = fopen( $this->path . '/config/view.php', 'w' );
-                $write = fwrite( $file, $content );
-                fclose( $file );
-            }
-            return $write;
-        } else return false;
-    }
-
-    /**
-     * Creates a 'routing' file from the template.
-     *
-     * @return boolean whether the file could be created or not.
-     */
-    public function generateRoutingFile() {
-        if ( is_dir( $this->path ) ) {
-            $templateFile = CITRUS_PATH . '/core/Citrus/mvc/templates/routing.tpl';
-            $tpl =  fopen( $templateFile, 'r' );
-            $content = fread( $tpl, filesize( $templateFile ) );
-            fclose( $tpl );
-            
-            $write = false;
-            if ( $content ) {
-                $file = fopen( $this->path . '/config/routing.php', 'w' );
-                $write = fwrite( $file, $content );
-                fclose( $file );
-            }
-            return $write;
-        } else return false;
-    }
-    
     public function getControllerUrl() {
         return CITRUS_PROJECT_URL . $this->name . '/' . $this->controller->name . '/';
     }

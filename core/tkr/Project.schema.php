@@ -53,9 +53,9 @@ return array(
             'formLabel'         => 'État',
             'inputType'         => 'SelectOne',
             'options'           => Array(
-                '0' => 'En attente',
-                '1' => 'En cours',
-                '2' => 'Terminé',
+                '1' => 'En attente',
+                '2' => 'En cours',
+                '3' => 'Terminé',
             ),
         ),
         'datecreated' => array(
