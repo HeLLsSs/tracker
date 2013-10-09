@@ -34,6 +34,7 @@ CosBackend.prototype = {
     },
     loadPage: function(url, success, error) {
         var self = this;
+
         self.activateNavbarLink(url);
         window.history.pushState({}, '', url);
         $.ajax({
@@ -54,9 +55,20 @@ CosBackend.prototype = {
                 if ($(rsp).data('role') == 'page') {
                     var id = $(rsp).attr('id');
                     $('#' + id, self.main_frame).trigger("show");
-                }
-                
+                }                
                 $('textarea:not(.wysiwyg), input[type="text"], input[type="password"]').addClass('form-control');
+            }, 
+            error: function(rsp) {
+                $(window).scrollTop(0);
+                window.clearTimeout(self.spin_timeout);
+                self.hideSpinner();
+                if (rsp.responseText)
+                    $(self.main_frame).html(rsp.responseText);
+                else {
+                    $(self.main_frame).html('');
+                    self.alert("Une erreur est survenue.", 'danger');
+                }
+                // cos.alert('');
             }
         });
     },
@@ -104,5 +116,18 @@ CosBackend.prototype = {
     activateNavbarLink: function(href) {
         $('li', this.navbar).removeClass('active');
         $('a[href="' + href + '"]', this.navbar).parent().addClass('active');
+    },
+
+    alert: function(message, type, autoclose) {
+        var alert = $('<div id="cos-alert" class="alert"></div>');
+        alert.html(message);
+        if (typeof type == "undefined" || type == '') {
+            type = 'info';
+        }
+        $('<a class="close" data-dismiss="alert" href="#" aria-hidden="true">&times;</a>').appendTo(alert);
+        alert.addClass('alert-' + type);
+        alert.appendTo('body');
+        if (typeof autoclose == "undefined" || autoclose === true)
+            window.setTimeout(function() {alert.alert('close');}, 3000);
     }
 };

@@ -83,3 +83,10 @@ tr.action {
 .form-group label.error {
     color: #B94A48;
 }
+
+.cos-error {
+    margin: 15px 0;
+}
+.cos-error .message {
+    font-weight: bold;
+}

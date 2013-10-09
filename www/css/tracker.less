@@ -8,6 +8,10 @@
 @md: ~"only screen and (min-width: 992px) and (max-width: 1199px)"; 
 @lg: ~"only screen and (min-width: 1200px)";
 
+.tooltip-inner {
+    white-space: normal !important;
+}
+
 .listing-bugs {
     margin-top: 20px;
 }
@@ -15,10 +19,12 @@
 .search-filters {
     fieldset {
         margin-top: 10px;
+        font-size: 13px;
     }
     legend {
         font-weight: bold;
-        font-size: 15px;
+        font-size: 13px;
+        // font-size: 15px;
         margin-bottom: 10px;
     }
     label {
@@ -43,56 +49,7 @@
 #bugs-list .listing {
     font-size: 13px;
 }
-@media @lg, @md {
-    #ticket-description {
-        font-size: 12px;
 
-        .well {
-            // min-height: 200px;
-        }
-    }
-    .filters-check {
-        height: auto !important;
-    }
-    .comment-author i {
-        font-size: 25px;
-    }
-}
-
-@media @xs {
-    .filters-check .form-group {
-        margin: 0;
-    }
-    .btn.btn-wide, .btn-group {
-        width: 100%;
-    }
-    #bugs-list .listing {
-        font-size: 12px;
-    }
-
-    h1 {
-        font-size: 24px;
-        small {
-            font-size: 14px;
-        }
-    }
-
-    #projet-panel .col-xs-12 {
-        // padding: 0;
-    }
-
-    #citrus-signature {
-        display: none;
-    }
-
-    .back-btn {
-        margin: 10px 0 0;
-    }
-
-    #status-switch, #status-switch button, ul.status-changer {
-        width: 100%
-    }
-}
 
 span.cut-txt {
     max-width: 200px;
@@ -163,5 +120,68 @@ textarea[name="content"] {
                 }
             }
         }
+    }
+}
+
+#cos-alert {
+    position: fixed;
+    top: 10px;
+    z-index: 1031;
+    width: 500px;
+    margin-left: -250px;
+    left: 50%;
+}
+
+@media @lg, @md {
+    #ticket-description {
+        font-size: 12px;
+
+        .well {
+            // min-height: 200px;
+        }
+    }
+    .filters-check {
+        height: auto !important;
+    }
+    .comment-author i {
+        font-size: 25px;
+    }
+}
+
+@media @xs {
+    .filters-check .form-group {
+        margin: 0;
+    }
+    .btn.btn-wide, .btn-group {
+        width: 100%;
+    }
+    #bugs-list .listing {
+        font-size: 12px;
+    }
+
+    h1 {
+        font-size: 24px;
+        small {
+            font-size: 14px;
+        }
+    }
+    #cos-alert {
+        width: 300px;
+        margin-left: -150px;
+    }
+    #projet-panel .col-xs-12 {
+        // padding: 0;
+    }
+
+    #citrus-signature {
+        display: none;
+    }
+
+    .back-btn {
+        margin: 10px 0 0;
+    }
+
+    #status-switch, #status-switch button, ul.status-changer {
+        width: 100%
     }
 }

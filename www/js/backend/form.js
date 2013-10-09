@@ -121,6 +121,7 @@ var selectMany_Update = function ( select, input, recap ) {
                 data: $(form).serialize(),
                 dataType: "json",
                 success: function(rsp) {
+                    cos.alert(rsp.message, rsp.status);
                     cos.loadPage(rsp.return_url);
                 },
                 error: function() {

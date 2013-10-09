@@ -88,6 +88,7 @@ $('#page').on('show', '#tkr-view-ticket', function() {
             success: function(rsp) {
                 if (typeof rsp == 'object') {
                     if (rsp.status == 'success') {
+                        cos.alert("Le ticket a été enregistré.", 'success');
                         $('#status-btn span:eq(0)').text('Statut : ' + text);
                         $('#status-btn').removeClass('btn-primary');
                         $('#status-btn').removeClass('btn-danger');
@@ -132,6 +133,7 @@ $('#page').on('show', '#tkr-view-ticket', function() {
             success: function(rsp) {
                 if (rsp.status == 'success') {
                     $('#dev-btn span:eq(0)').text('Attribué à : ' + text);
+                    cos.alert("Le ticket a été enregistré.", 'success');
                     $.ajax({
                         url: 'status-switch',
                         success: function(rsp) {
