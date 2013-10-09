@@ -37,7 +37,7 @@ return array(
         'password' => array(
             'type'          => 'string',
             'length'        => 255,
-            'null'          => false,
+            'null'          => true,
             'formLabel'     => 'Mot de passe',
             'inputType'     => 'InputPassword',
         ),

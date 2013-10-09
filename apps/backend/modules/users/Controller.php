@@ -45,7 +45,7 @@ class Controller extends mvc\ObjectController {
         if ( $request->method == 'POST' ) {
             $cos = Citrus::getInstance();
             
-            $this->layout = false;
+            $this->view->layout = false;
             $data = $request->param( 'value', FILTER_SANITIZE_STRING );
             if ( $data ) {
                 $test = $cos->db->execute(
@@ -77,47 +77,8 @@ class Controller extends mvc\ObjectController {
         } else parent::do_edit( $request );
     }
     
-    /*public function do_save( $request ) {
-        $cos = Citrus::getInstance();
-        if ( $request->method == 'POST' ) {
-            $type = $request->param( 'modelType', 'string' );
-            vexp($request);exit;
-            if ( class_exists( $type ) ) {
-                $inst = new $type();
-                $inst->hydrateByFilters();
-                $pass1 = $request->param( 'password1', 'string' );
-                $pass2 = $request->param( 'password2', 'string' );
-                if ( $pass1 === $pass2 ) {
-                    $inst->args['password'] = md5( $pass1 );
-                }
-                $rec = $inst->save();
-                vexp($rec);exit();
-
-                if ( $request->isXHR ) {
-                    $this->template = new \core\Citrus\mvc\Template( 'json-response' );
-                    $this->layout = false;
-                    if ( $rec ) {
-                        $this->template->assign('status', "success");
-                        $response['status'] = "success";
-                        $response['return_url'] = $cos->app->getControllerUrl();
-                    } else {
-                        $response['status'] = "error";
-                    }
-                    $cos->response->contentType = "application/json";
-                    $this->template->assign( 'response', $response );
-                } else {
-                    $loc = $cos->app->getControllerUrl();
-                    http\Http::redirect( $loc );
-                }
-            }
-        } else {
-            die( 'Bad method request' );
-        }
-    }*/
-
-
     public function do_save( $request ) {
-        $this->layout = !$request->isXHR;
+        $this->view->layout = !$request->isXHR;
         $report = Array();
         $cos = Citrus::getInstance();
         if ( $request->method != 'POST' ) {
@@ -127,11 +88,8 @@ class Controller extends mvc\ObjectController {
                 Citrus::pageNotFound();
             }
         } else {
-            // vexp($_POST, true);exit;
-            $type = $request->param( 'modelType', 'string' );
-
-            if ( class_exists( $type ) ) {
-                $inst = new $type();
+            if ( class_exists( $this->className ) ) {
+                $inst = new $this->className();
                 if ( isset( $_FILES ) ) {
                     foreach ( $_FILES as $name => $file ) {
                         if ( !empty( $file['name'] ) ) {
@@ -145,24 +103,26 @@ class Controller extends mvc\ObjectController {
                         }
                     }
                 }
-                $inst->password = md5( $password );
+                $password = $request->param( 'password', 'string' );
+                if ( $password && $password != '' )
+                    $inst->password = md5( $inst->password );
                 $inst->hydrateByFilters();
                 $rec = $inst->save();
                 $inst->hydrateManyByFilters();
                 
-                // vexp($inst);exit();
                 if ( $request->isXHR ) {
-                    $this->template = new \core\Citrus\mvc\Template( 'json-response' );
-                    $this->layout = false;
+                    $this->view = new mvc\View( 'json-response' );
+                    $this->view->layout = false;
                     if ( $rec ) {
-                        $this->template->assign('status', "success");
+                        $this->view->assign('status', "success");
                         $response['status'] = "success";
                         $response['return_url'] = $cos->app->getControllerUrl();
+                        $response['message'] = "L'utilisateur a été enregistré.";
                     } else {
                         $response['status'] = "error";
                     }
                     $cos->response->contentType = "application/json";
-                    $this->template->assign( 'response', $response );
+                    $this->view->assign( 'response', $response );
                 } else {
                     $loc = $cos->app->getControllerUrl();
                     http\Http::redirect( $loc );
