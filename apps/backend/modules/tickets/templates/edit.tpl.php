@@ -24,7 +24,7 @@
                     <?php echo $form->render() ?>
                     <p class="formActions">
                         <a class="btn-cancel btn btn-danger" href="/<?php 
-                            echo $cos->app->name . '/' . $cos->app->controller->name . '/' 
+                            echo $cos->app->name . '/tickets/' . $res->id . '/view' 
                         ?>">Annuler</a>
                         <button type="submit" class="btn btn-primary"><?php 
                             echo $res->id ? 'Modifier' : 'Créer'?>
