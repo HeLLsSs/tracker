@@ -72,7 +72,7 @@ foreach ( $tickets as $object ) {
             if ( $chmp == "status" ) {
                 switch ( $object->status ) {
                     case \core\tkr\Ticket::STATUS_WAITING:
-                        $label_class = ' label-default';
+                        $label_class = ' label-danger';
                         break;
                     case \core\tkr\Ticket::STATUS_ASSIGNED:
                         $label_class = ' label-info';
@@ -84,7 +84,7 @@ foreach ( $tickets as $object ) {
                         $label_class = ' label-success';
                         break;
                     case \core\tkr\Ticket::STATUS_ABORTED:
-                        $label_class = ' label-info';
+                        $label_class = ' label-default';
                         break;
                     default:
                         $label_class = '';
