@@ -21,7 +21,7 @@
         </div>
         <div id="projet-panel">
             <h1>
-                <?php echo $res->title ?>
+                <?php echo $res->title ?><br>
                 <small>
                     Créé le <?php echo $res->datecreated->format( 'd/m/Y à H:i' ) ?>
                 </small>
