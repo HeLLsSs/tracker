@@ -130,8 +130,8 @@ class Controller extends mvc\ObjectController {
             $rec = $res->save();
             $response = Array();
             if ( $request->isXHR ) {
+                $this->view = new mvc\View( 'json-response' );
                 if ( $rec ) {
-                    $this->view = new mvc\View( 'json-response' );
                     $response['status'] = "success";
                     $response['data']['status'] = (int) $res->status;
                 } else {
@@ -139,7 +139,7 @@ class Controller extends mvc\ObjectController {
                 }
                 $cos->response->contentType = "application/json";
                 $this->view->assign( 'response', $response );
-            } else http\Http::redirect( $request->referer );
+            } #else http\Http::redirect( $request->referer );
         } else Citrus\Citrus::pageNotFound();
     }
 
@@ -159,8 +159,8 @@ class Controller extends mvc\ObjectController {
             $rec = $res->save();
             $response = Array();
             if ( $request->isXHR ) {
+                $this->view = new mvc\View( 'json-response' );
                 if ( $rec ) {
-                    $this->view = new mvc\View( 'json-response' );
                     $response['status'] = "success";
                     $response['data']['status'] = (int) $res->status;
                 } else {
