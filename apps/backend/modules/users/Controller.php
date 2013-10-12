@@ -23,11 +23,7 @@ class Controller extends mvc\ObjectController {
             $password = $request->param( 'password', 'string' );
 
             if ( $cos->user->login( $login, $password ) ) {
-                /*if (isset($_SESSION[$redir])) {
-                    http\Http::redirect( $_SESSION[$redir] );
-                    unset($_SESSION[$redir]);
-                }
-                else*/ http\Http::redirect( '/backend/projects/' );
+                http\Http::redirect( '/backend/projects/' );
             } else {
                 http\Http::redirect( '/backend/projects/' );
             }
@@ -104,9 +100,9 @@ class Controller extends mvc\ObjectController {
                     }
                 }
                 $password = $request->param( 'password', 'string' );
-                if ( $password && $password != '' )
-                    $inst->password = md5( $inst->password );
                 $inst->hydrateByFilters();
+                if ( $password && $password != '' ) $inst->password = sha1( $inst->password );
+
                 $rec = $inst->save();
                 $inst->hydrateManyByFilters();
                 
