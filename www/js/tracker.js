@@ -68,11 +68,62 @@ $('#page').on('show', '#tkr-view-project', function() {
 
     });
 
-    $('.cut-txt').tooltip({
-        // placement: 'right',
-        title: function() {
-            return $(this).text();
+    $('.cut-txt').each(function(i, item) {
+        if ($(item).text().length > 28) {
+            $(item).tooltip({
+                // placement: 'right',
+                title: function() {
+                    return $(this).text();
+                }
+            });
         }
+    });
+
+    $(this).on('click', '.status-changer a', function (e) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        $(this).parents('.btn-group.open').removeClass('open');
+        var href = $(this).attr('href').replace('#status_', '');
+        var text = $(this).text();
+        var statusbtn = $(this).parent().parent().prev();
+        $(this).parent().siblings().children('a').removeClass('active');
+        $(this).addClass('active');
+        $.ajax({
+            url: href,
+            success: function(rsp) {
+                if (typeof rsp == 'object') {
+                    if (rsp.status == 'success') {
+                        cos.alert("Le ticket a été enregistré.", 'success');
+                        $('span:eq(0)', statusbtn).text(text);
+                        statusbtn.removeClass('btn-primary');
+                        statusbtn.removeClass('btn-danger');
+                        statusbtn.removeClass('btn-warning');
+                        statusbtn.removeClass('btn-info');
+                        statusbtn.removeClass('btn-success');
+
+                        switch (rsp.data.status) {
+                            case 1: // waiting
+                                statusbtn.addClass('btn-danger');
+                                break;
+                            case 2: // assigned
+                                statusbtn.addClass('btn-info');
+                                break;
+                            case 3: // client waiting
+                                statusbtn.addClass('btn-warning');
+                                break;
+                            case 4: // fixed
+                                statusbtn.addClass('btn-success');
+                                break;
+                            case 5: // aborted
+                                statusbtn.addClass('btn-danger');
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                }
+            }
+        });
     });
 
     // getBugsList();
@@ -83,6 +134,8 @@ $('#page').on('show', '#tkr-view-ticket', function() {
     $(this).on('click', '.status-changer a', function (e) {
         var href = $(this).attr('href').replace('#status_', '');
         var text = $(this).text();
+        $(this).parent().siblings().find('a').removeClass('active');
+        $(this).addClass('active');
         $.ajax({
             url: href,
             success: function(rsp) {
@@ -164,6 +217,7 @@ $('#page').on('show', '#tkr-view-ticket', function() {
         });
     });
 }); // end view ticket
+
 
 function getBugsList(status) {
     var url = "view";

@@ -72,26 +72,55 @@ foreach ( $tickets as $object ) {
             if ( $chmp == "status" ) {
                 switch ( $object->status ) {
                     case \core\tkr\Ticket::STATUS_WAITING:
-                        $label_class = ' label-danger';
+                        $btn_class = ' btn-danger';
                         break;
                     case \core\tkr\Ticket::STATUS_ASSIGNED:
-                        $label_class = ' label-info';
+                        $btn_class = ' btn-info';
                         break;
                     case \core\tkr\Ticket::STATUS_CLIENT_WAITING:
-                        $label_class = ' label-warning';
+                        $btn_class = ' btn-warning';
                         break;
                     case \core\tkr\Ticket::STATUS_FIXED:
-                        $label_class = ' label-success';
+                        $btn_class = ' btn-success';
                         break;
                     case \core\tkr\Ticket::STATUS_ABORTED:
-                        $label_class = ' label-default';
+                        $btn_class = ' btn-default';
                         break;
                     default:
-                        $label_class = '';
+                        $btn_class = '';
                         break;
                 }
                 $tick = \core\tkr\Ticket::STATUS_FIXED == $object->status ? '<i class="icon-ok"></i> ' : '';
-                $str = '<span class="label' . $label_class . '">' . $tick . $str . '</span>';
+                $btn = '<div class="btn-group">';
+                    $btn .= '<button class="status-btn btn btn-xs dropdown-toggle' . $btn_class . '" data-toggle="dropdown">';
+                        $btn .= '<span>' . $str . '</span> <i class="icon-caret-down"></i>';
+                    $btn .= '</button>';
+                    $btn .= '<ul class="dropdown-menu status-changer" role="menu">';
+                    foreach ( \core\tkr\Ticket::statuses() as $k => $v ) {
+                        $btn .= '<li>';
+                            $btn .= '<a href="' . CITRUS_PROJECT_URL . 
+                                        $cos->app->name . '/tickets/' . 
+                                        $object->id . 
+                                        '/status/' . $k . '"';
+                                        if ( $k == $object->status ) $btn .= ' class="active"';
+                            $btn .= '>';
+                                $btn .= $v;
+                            $btn .= '</a>';
+                        $btn .= '</li>';
+                    }
+                    $btn .= '</ul>';
+                $btn .= '</div>';
+                $str = $btn;
+            }
+            if ( $chmp == "title" ) {
+                $str .= "<br><small>";
+                $str .= $object->datecreated;
+                $str .= " – ";
+                $str .= $object->author;
+                $str .= " – ";
+                $str .= $object->getType();
+                $str .= " – ";
+                $str .= $object->getPriority() . "</small>";
             }
             $resTr[] = '<td>' . $str . '</td>';
 

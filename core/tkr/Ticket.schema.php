@@ -110,7 +110,7 @@ return array(
             'foreignReference'  => 'id',
         ),
     ),*/
-    'adminColumns' => array( 'title', 'type', 'status', 'priority', 'author_id', 'developer_id', 'datecreated' ),
+    'adminColumns' => array( 'title', 'status', /*'type', 'priority', 'author_id',*/ 'developer_id'/*, 'datecreated'*/ ),
     'orderColumn' => 'datecreated DESC',
     'linkColumns' => Array( 'title' ),
 );
