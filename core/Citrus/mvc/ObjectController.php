@@ -136,7 +136,7 @@ class ObjectController extends Controller {
                 $inst->hydrateManyByFilters();
                 
                 if ( $request->isXHR ) {
-                    $this->view = new mvc\View( 'json-response' );
+                    $this->view = new View( 'json-response' );
                     $this->view->layout = false;
                     if ( $rec ) {
                         $this->view->assign('status', "success");
