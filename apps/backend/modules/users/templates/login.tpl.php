@@ -1,10 +1,10 @@
 <div id="backDoor">
     <?php echo form_tag( 'post', CITRUS_PROJECT_URL . 'backend/login', array( 'id' => 'loginForm' ) ) ?>
         <div class="form-group">
-            <input type="text" name="email" value="" id="login" class="required" placeholder="E-mail">
+            <input type="email" name="email" value="" id="login" required class="form-control" placeholder="E-mail">
         </div>
         <div class="form-group">
-            <input type="password" name="password" value="" id="password" class="required" placeholder="password">
+            <input type="password" name="password" value="" id="password" required class="form-control" placeholder="password">
         </div>
 		
         <p style="text-align:center;">

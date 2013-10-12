@@ -8,7 +8,7 @@ $(document).ready(function() {
         $(this).removeClass('open');
     });
 
-    $('textarea:not(.wysiwyg), input[type="text"], input[type="password"]').addClass('form-control');
+    $('textarea:not(.wysiwyg), [type="text"], [type="email"], [type="password"]').addClass('form-control');
 
     $('#loginForm #login').focus();
 

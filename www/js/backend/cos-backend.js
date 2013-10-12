@@ -56,7 +56,7 @@ CosBackend.prototype = {
                     var id = $(rsp).attr('id');
                     $('#' + id, self.main_frame).trigger("show");
                 }                
-                $('textarea:not(.wysiwyg), input[type="text"], input[type="password"]').addClass('form-control');
+                $('textarea:not(.wysiwyg), [type="text"], [type="email"], [type="password"]').addClass('form-control');
             }, 
             error: function(rsp) {
                 $(window).scrollTop(0);
@@ -69,6 +69,10 @@ CosBackend.prototype = {
                     self.alert("Une erreur est survenue.", 'danger');
                 }
                 // cos.alert('');
+            },
+            progress: function(e) {
+                var pct = (e.loaded / e.total) * 100;
+                console.log(pct);
             }
         });
     },
