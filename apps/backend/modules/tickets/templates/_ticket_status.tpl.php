@@ -58,7 +58,7 @@
             </div>
         </div>
         <div class="clearfix"></div>
-        <div class="col-lg-9 col-md-12 col-sm-12 pull-right">
+        <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12 pull-right">
             <div id="comments-list">
                 <?php include_slice( 'comments', Array( 'comments' => $res->comments ) ) ?>
             </div>
