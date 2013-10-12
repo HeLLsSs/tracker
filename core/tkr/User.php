@@ -26,7 +26,7 @@ class User extends \core\Citrus\data\Model {
     private function fetchUser( $login, $password ) {
         $cos = Citrus::getInstance();
         
-        $password = md5( $password );
+        $password = sha1( $password );
         
         $exists = $cos->db->execute( 
             "SELECT * FROM " . self::TABLENAME . "
